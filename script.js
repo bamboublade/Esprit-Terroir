@@ -1,4 +1,43 @@
-// Rechercher automatiquement le Place ID correct
+// Initialize the contact map
+function initContactMap() {
+    // Create the contact map
+    contactMap = new google.maps.Map(document.getElementById("contact-map"), {
+        center: businessData.location,
+        zoom: 15,
+        mapTypeControl: false,
+        streetViewControl: false,
+        fullscreenControl: false,
+        styles: getMapStyles()
+    });
+    
+    // Create a marker for the business location on the contact map
+    const contactMarker = new google.maps.Marker({
+        position: businessData.location,
+        map: contactMap,
+        title: businessData.name
+    });
+    
+    // Create a simplified info window for the contact map
+    const contactInfoWindow = new google.maps.InfoWindow({
+        content: `
+            <div style="text-align: center; padding: 10px;">
+                <div style="font-weight: bold;">${businessData.name}</div>
+                <div>${businessData.address}</div>
+            </div>
+        `,
+        maxWidth: 250
+    });
+    
+    // Add click event to the marker to display the info window
+    contactMarker.addListener('click', () => {
+        contactInfoWindow.open(contactMap, contactMarker);
+    });
+    
+    // Show info window by default after a delay
+    setTimeout(() => {
+        contactInfoWindow.open(contactMap, contactMarker);
+    }, 1000);
+}// Rechercher automatiquement le Place ID correct
 function findCorrectPlaceId() {
     console.log("Recherche automatique du Place ID pour Esprit Terroir...");
     
@@ -80,6 +119,56 @@ let businessData = {
     rating: 4.7,
     reviewsCount: 127
 };
+
+// Initialize the maps when Google Maps API is loaded
+// Exposer la fonction au niveau global pour que Google Maps puisse l'appeler
+window.initMaps = function() {
+    // Initialize the main business map
+    initBusinessMap();
+    
+    // Initialize the contact map
+    initContactMap();
+    
+    // Rechercher le bon Place ID automatiquement, puis récupérer les données
+    findCorrectPlaceId();
+};
+
+// Initialize the business map
+function initBusinessMap() {
+    // Create the map
+    map = new google.maps.Map(document.getElementById("map"), {
+        center: businessData.location,
+        zoom: 15,
+        mapTypeControl: true,
+        streetViewControl: true,
+        fullscreenControl: true,
+        styles: getMapStyles()
+    });
+    
+    // Create places service
+    placesService = new google.maps.places.PlacesService(map);
+    
+    // Create info window
+    infoWindow = new google.maps.InfoWindow({
+        maxWidth: 320
+    });
+    
+    // Create a marker for the business location
+    marker = new google.maps.Marker({
+        position: businessData.location,
+        map: map,
+        animation: google.maps.Animation.DROP,
+        title: businessData.name
+    });
+    
+    // Add click event to the marker to display the info window
+    marker.addListener('click', () => {
+        showBusinessInfoWindow();
+    });
+    
+    // Show info window by default
+    setTimeout(showBusinessInfoWindow, 1000);
+}
 
 // Initialiser la carte et rechercher automatiquement le Place ID
 window.initMaps = function() {
@@ -469,9 +558,7 @@ function generateAvatarColor(letter) {
 }
 
 // Supprimer la fonction displayFallbackReviews qui n'est plus utilisée
-// Display fallback reviews if Google data is not available
-// Cette fonction n'est plus utilisée car nous voulons uniquement des avis réels
-// function displayFallbackReviews() { ... }
+// Cette fonction a été supprimée car nous voulons uniquement des avis réels
 
 // Generate HTML for star ratings
 function generateStarsHTML(rating, small = false) {
