@@ -263,8 +263,8 @@
                 </div>
                 
                 <div class="google-actions">
-                    <a href="#" id="load-more-reviews" class="btn btn-outline" target="_blank">Voir tous les avis sur Google</a>
-                    <a href="https://g.page/Esprit-Terroir/review" target="_blank" class="btn">Laisser un avis</a>
+                    <a href="https://www.google.com/maps/search/?api=1&query=Esprit+Terroir+1960+route+des+Ch%C3%A2teaux+du+Mont+Robert,+13290+Aix-en-Provence" id="load-more-reviews" class="btn btn-outline" target="_blank" style="display: none;">Voir tous les avis sur Google</a>
+                    <a href="https://g.page/Esprit-Terroir/review" id="leave-review-button" target="_blank" class="btn">Laisser un avis</a>
                 </div>
             </div>
         </div>
@@ -412,7 +412,8 @@
 
     <!-- JavaScript -->
     <script src="script.js"></script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBFsD32u2ug2vcqdKJCzUO0_TZZ3TLUrzw&libraries=places&callback=initMaps"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places&callback=initMaps"></script>
+    <!-- IMPORTANT: Replace YOUR_API_KEY with your actual Google Maps API Key -->
     
     <!-- Structured data for SEO -->
     <script type="application/ld+json">
