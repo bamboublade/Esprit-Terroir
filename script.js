@@ -16,7 +16,8 @@ let businessData = {
 };
 
 // Initialize the maps when Google Maps API is loaded
-function initMaps() {
+// Exposer la fonction au niveau global pour que Google Maps puisse l'appeler
+window.initMaps = function() {
     // Initialize the main business map
     initBusinessMap();
     
