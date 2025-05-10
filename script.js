@@ -5,8 +5,11 @@ let placesService;
 let marker;
 let infoWindow;
 let businessData = {
-    placeId: 'ChIJb9kc2JWNyRIRqNTA1DNyn-Q', // Esprit Terroir Place ID
-    location: { lat: 43.52142, lng: 5.451539 }, // Default location coordinates
+    // NOTE: Ce Place ID n'est plus valide et doit être mis à jour
+    // Pour trouver le nouveau Place ID, utilisez l'outil de recherche de Google:
+    // https://developers.google.com/maps/documentation/javascript/examples/places-placeid-finder
+    placeId: 'INVALID_PLACE_ID', // Place ID invalide - nous utilisons les données locales à la place
+    location: { lat: 43.52142, lng: 5.451539 }, // Coordonnées d'Esprit Terroir
     name: 'Esprit Terroir',
     address: '1960 route des Châteaux du Mont Robert, 13290 Aix-en-Provence',
     phone: '04 88 41 73 27',
@@ -108,6 +111,20 @@ function initContactMap() {
 
 // Fetch business data from Google Places API
 function fetchBusinessData() {
+    // En raison des problèmes d'API, nous utilisons directement les données fallback
+    console.log("Utilisation des données locales (mode fallback) en raison des restrictions d'API");
+    
+    // Mettre à jour l'interface avec les données locales
+    updateBusinessUI();
+    
+    // Afficher l'info window avec les données locales
+    showBusinessInfoWindow();
+    
+    // Afficher les avis fallback
+    displayFallbackReviews();
+    
+    // Note: Code commenté ci-dessous à réactiver une fois les problèmes d'API résolus
+    /*
     const request = {
         placeId: businessData.placeId,
         fields: [
@@ -159,6 +176,7 @@ function fetchBusinessData() {
             displayFallbackReviews();
         }
     });
+    */
 }
 
 // Update the UI with business data
