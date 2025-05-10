@@ -199,21 +199,72 @@
 
     <!-- JavaScript -->
     <script src="script.js"></script>
-    <!-- Assurez-vous que le script.js est complètement chargé avant de charger l'API Google Maps -->
+    <!-- Veillez à ce que le script utilise la bonne clé API et le bon callback -->
     <script>
-        // Vérifier que la fonction initMaps existe dans le scope global
+        // Si la fonction n'est pas définie après le chargement de script.js, définissons-la ici
         if (typeof initMaps !== 'function') {
-            // Si elle n'existe pas, la créer en tant que fonction globale
             window.initMaps = function() {
-                // Initialize the main business map
-                initBusinessMap();
+                console.log("Fonction initMaps de secours appelée");
                 
-                // Initialize the contact map
-                initContactMap();
+                // Définir les fonctions minimales nécessaires si elles n'existent pas
+                if (typeof initBusinessMap !== 'function') {
+                    window.initBusinessMap = function() {
+                        console.log("Version de secours de initBusinessMap appelée");
+                        const mapElement = document.getElementById("map");
+                        if (mapElement) {
+                            const map = new google.maps.Map(mapElement, {
+                                center: { lat: 43.52142, lng: 5.451539 },
+                                zoom: 15
+                            });
+                            
+                            const marker = new google.maps.Marker({
+                                position: { lat: 43.52142, lng: 5.451539 },
+                                map: map,
+                                title: "Esprit Terroir"
+                            });
+                        }
+                    };
+                }
                 
-                // Get business data from Google
-                fetchBusinessData();
-            }
+                if (typeof initContactMap !== 'function') {
+                    window.initContactMap = function() {
+                        console.log("Version de secours de initContactMap appelée");
+                        const mapElement = document.getElementById("contact-map");
+                        if (mapElement) {
+                            const map = new google.maps.Map(mapElement, {
+                                center: { lat: 43.52142, lng: 5.451539 },
+                                zoom: 15
+                            });
+                            
+                            const marker = new google.maps.Marker({
+                                position: { lat: 43.52142, lng: 5.451539 },
+                                map: map,
+                                title: "Esprit Terroir"
+                            });
+                        }
+                    };
+                }
+                
+                // Message si les fonctions sont manquantes
+                if (typeof findCorrectPlaceId !== 'function') {
+                    console.error("La fonction findCorrectPlaceId n'est pas définie");
+                    // Afficher un message dans la section des avis
+                    const reviewsContainer = document.getElementById('reviews-container');
+                    if (reviewsContainer) {
+                        reviewsContainer.innerHTML = `
+                            <div class="no-reviews-message">
+                                <p>La récupération des avis Google n'est pas disponible pour le moment.</p>
+                                <p>Consultez nos avis sur <a href="https://g.page/Esprit-Terroir/review" target="_blank">Google Maps</a>.</p>
+                            </div>
+                        `;
+                    }
+                }
+                
+                // Appeler les fonctions disponibles
+                if (typeof initBusinessMap === 'function') initBusinessMap();
+                if (typeof initContactMap === 'function') initContactMap();
+                if (typeof findCorrectPlaceId === 'function') findCorrectPlaceId();
+            };
         }
     </script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBFsD32u2ug2vcqdKJCzUO0_TZZ3TLUrzw&libraries=places&callback=initMaps"></script>
