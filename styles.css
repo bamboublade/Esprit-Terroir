@@ -1,4 +1,21 @@
-:root {
+.no-reviews-message {
+    grid-column: 1 / -1;
+    background-color: white;
+    border-radius: 8px;
+    padding: 30px;
+    text-align: center;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.05);
+}
+
+.no-reviews-message p {
+    margin-bottom: 15px;
+}
+
+.no-reviews-message a {
+    color: var(--google-blue);
+    font-weight: 600;
+    text-decoration: underline;
+}:root {
     --primary: #64746A;
     --primary-dark: #4D5A52;
     --primary-light: #9BA391;
