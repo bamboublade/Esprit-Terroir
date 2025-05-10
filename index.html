@@ -199,6 +199,23 @@
 
     <!-- JavaScript -->
     <script src="script.js"></script>
+    <!-- Assurez-vous que le script.js est complètement chargé avant de charger l'API Google Maps -->
+    <script>
+        // Vérifier que la fonction initMaps existe dans le scope global
+        if (typeof initMaps !== 'function') {
+            // Si elle n'existe pas, la créer en tant que fonction globale
+            window.initMaps = function() {
+                // Initialize the main business map
+                initBusinessMap();
+                
+                // Initialize the contact map
+                initContactMap();
+                
+                // Get business data from Google
+                fetchBusinessData();
+            }
+        }
+    </script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBFsD32u2ug2vcqdKJCzUO0_TZZ3TLUrzw&libraries=places&callback=initMaps"></script>
 
     <!-- Structured data for SEO -->
