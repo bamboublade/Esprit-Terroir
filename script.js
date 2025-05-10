@@ -34,12 +34,33 @@ function findCorrectPlaceId() {
             fetchBusinessData();
         } else {
             console.error("Impossible de trouver le Place ID automatiquement:", status);
-            console.log("Utilisation des données statiques comme fallback");
+            console.log("Essai de recherche avec Nearby Search comme alternative...");
             
-            // Utiliser les données statiques
-            updateBusinessUI();
-            showBusinessInfoWindow();
-            displayFallbackReviews();
+            // Essayer avec nearbySearch comme alternative
+            const nearbyRequest = {
+                location: businessData.location,
+                radius: 500,
+                keyword: 'Esprit Terroir'
+            };
+            
+            placesService.nearbySearch(nearbyRequest, (nearbyResults, nearbyStatus) => {
+                if (nearbyStatus === google.maps.places.PlacesServiceStatus.OK && nearbyResults && nearbyResults.length > 0) {
+                    // Place ID trouvé par recherche à proximité
+                    const nearbyPlace = nearbyResults[0];
+                    console.log("Place ID trouvé par recherche à proximité:", nearbyPlace.place_id);
+                    
+                    businessData.placeId = nearbyPlace.place_id;
+                    fetchBusinessData();
+                } else {
+                    console.error("Impossible de trouver le Place ID via recherche à proximité:", nearbyStatus);
+                    console.log("Utilisation des données statiques comme fallback");
+                    
+                    // Utiliser les données statiques
+                    updateBusinessUI();
+                    showBusinessInfoWindow();
+                    displayFallbackReviews();
+                }
+            });
         }
     });
 }// Global variables
@@ -152,10 +173,18 @@ function initContactMap() {
 function fetchBusinessData() {
     // Vérifier si nous avons un Place ID valide
     if (!businessData.placeId) {
-        console.log("Pas de Place ID disponible, utilisation des données statiques");
+        console.log("Pas de Place ID disponible, impossible de récupérer les avis");
         updateBusinessUI();
         showBusinessInfoWindow();
-        displayFallbackReviews();
+        
+        // Afficher un message indiquant qu'aucun avis n'est disponible
+        const reviewsContainer = document.getElementById('reviews-container');
+        reviewsContainer.innerHTML = `
+            <div class="no-reviews-message">
+                <p>Impossible de récupérer les avis Google - aucun identifiant d'établissement trouvé.</p>
+                <p>Consultez nos avis sur <a href="https://g.page/Esprit-Terroir/review" target="_blank">Google Maps</a>.</p>
+            </div>
+        `;
         return;
     }
     
@@ -163,6 +192,7 @@ function fetchBusinessData() {
     
     const request = {
         placeId: businessData.placeId,
+        // Assurez-vous que 'reviews' est inclus dans les champs demandés
         fields: [
             'name', 
             'formatted_address',
@@ -172,7 +202,7 @@ function fetchBusinessData() {
             'opening_hours',
             'rating',
             'user_ratings_total',
-            'reviews',
+            'reviews', // Explicitement demander les avis
             'photos'
         ]
     };
@@ -180,6 +210,7 @@ function fetchBusinessData() {
     placesService.getDetails(request, (place, status) => {
         if (status === google.maps.places.PlacesServiceStatus.OK && place) {
             console.log("Données récupérées avec succès:", place);
+            console.log("Avis disponibles:", place.reviews ? place.reviews.length : 0);
             
             // Update businessData with the fetched data
             businessData = {
@@ -205,13 +236,22 @@ function fetchBusinessData() {
             // Update the info window with the new data
             showBusinessInfoWindow();
             
-            // Display reviews
-            displayReviews(businessData.reviews);
+            // Afficher uniquement les avis Google réels
+            displayReviews(place.reviews || []);
         } else {
             console.error('Error fetching business details:', status);
-            // Use fallback data and update UI
+            // Mettre à jour l'UI avec les données de base
             updateBusinessUI();
-            displayFallbackReviews();
+            showBusinessInfoWindow();
+            
+            // Afficher un message indiquant que les avis n'ont pas pu être récupérés
+            const reviewsContainer = document.getElementById('reviews-container');
+            reviewsContainer.innerHTML = `
+                <div class="no-reviews-message">
+                    <p>Impossible de récupérer les avis Google (erreur: ${status}).</p>
+                    <p>Consultez nos avis sur <a href="https://g.page/Esprit-Terroir/review" target="_blank">Google Maps</a>.</p>
+                </div>
+            `;
         }
     });
 }
@@ -359,31 +399,45 @@ function showBusinessInfoWindow() {
 function displayReviews(reviews) {
     const reviewsContainer = document.getElementById('reviews-container');
     
+    // Vérifier si nous avons des avis à afficher
     if (!reviews || reviews.length === 0) {
-        displayFallbackReviews();
+        console.log("Aucun avis réel n'a été trouvé");
+        reviewsContainer.innerHTML = `
+            <div class="no-reviews-message">
+                <p>Aucun avis n'a pu être récupéré depuis Google pour le moment.</p>
+                <p>Consultez nos avis sur <a href="https://g.page/Esprit-Terroir/review" target="_blank">Google Maps</a>.</p>
+            </div>
+        `;
         return;
     }
     
+    console.log(`Affichage de ${reviews.length} avis réels de Google`);
+    
     let reviewsHTML = '';
     
-    reviews.forEach(review => {
+    reviews.forEach((review, index) => {
+        console.log(`Avis ${index + 1}:`, review.author_name, review.rating, review.time);
+        
         // Get the first letter of the author name for the avatar
-        const avatarText = review.author_name ? review.author_name.charAt(0) : '?';
+        const avatarText = review.author_name ? review.author_name.charAt(0).toUpperCase() : '?';
         
         // Format the relative time
         const relativeTime = formatRelativeTime(review.time);
         
+        // Préparer le texte de l'avis (s'assurer qu'il n'est pas null)
+        const reviewText = review.text || '';
+        
         reviewsHTML += `
             <div class="review-card">
                 <div class="review-header">
-                    <div class="review-avatar">${avatarText}</div>
+                    <div class="review-avatar" style="background-color: ${generateAvatarColor(avatarText)}">${avatarText}</div>
                     <div>
                         <div class="review-author">${review.author_name || 'Utilisateur Google'}</div>
                         <div class="review-date">${relativeTime}</div>
                     </div>
                 </div>
                 <div class="review-stars">${generateStarsHTML(review.rating)}</div>
-                <div class="review-content">${review.text || ''}</div>
+                <div class="review-content">${reviewText}</div>
             </div>
         `;
     });
@@ -392,61 +446,32 @@ function displayReviews(reviews) {
     
     // Add event listener to "load more reviews" button
     const loadMoreButton = document.getElementById('load-more-reviews');
-    loadMoreButton.addEventListener('click', (e) => {
-        e.preventDefault();
-        window.open(`https://search.google.com/local/reviews?placeid=${businessData.placeId}`, '_blank');
-    });
+    if (loadMoreButton) {
+        loadMoreButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            // Utiliser le Place ID pour ouvrir la page des avis Google
+            if (businessData.placeId) {
+                window.open(`https://search.google.com/local/reviews?placeid=${businessData.placeId}`, '_blank');
+            } else {
+                // Fallback si nous n'avons pas de Place ID
+                window.open(`https://www.google.com/search?q=Esprit+Terroir+Aix+en+Provence+avis`, '_blank');
+            }
+        });
+    }
 }
 
-// Display fallback reviews if Google data is not available
-function displayFallbackReviews() {
-    const reviewsContainer = document.getElementById('reviews-container');
-    
-    // Fallback reviews
-    const fallbackReviews = [
-        {
-            author: 'Sophie Martin',
-            date: 'il y a 2 mois',
-            rating: 5,
-            text: 'Excellente épicerie fine ! J\'y trouve toujours des produits de qualité, un accueil chaleureux et des conseils avisés. Leur sélection de fromages est incroyable et les fruits et légumes sont toujours ultra frais. Un endroit incontournable à Aix.'
-        },
-        {
-            author: 'Jean Dupont',
-            date: 'il y a 1 mois',
-            rating: 5,
-            text: 'Une vraie mine d\'or pour les amateurs de bons produits. La sélection de vins est remarquable et les conseils sont toujours pertinents. Les prix sont un peu élevés mais la qualité est au rendez-vous. Je recommande vivement !'
-        },
-        {
-            author: 'Marie Leroy',
-            date: 'il y a 3 mois',
-            rating: 4,
-            text: 'J\'adore cette épicerie ! Leur rayon fromage est exceptionnel, avec une grande variété de produits locaux. Le personnel est très sympathique et connaisseur. Seul petit bémol, le stationnement peut être difficile à certaines heures.'
-        }
-    ];
-    
-    let reviewsHTML = '';
-    
-    fallbackReviews.forEach(review => {
-        // Get the first letter of the author name for the avatar
-        const avatarText = review.author.charAt(0);
-        
-        reviewsHTML += `
-            <div class="review-card">
-                <div class="review-header">
-                    <div class="review-avatar">${avatarText}</div>
-                    <div>
-                        <div class="review-author">${review.author}</div>
-                        <div class="review-date">${review.date}</div>
-                    </div>
-                </div>
-                <div class="review-stars">${generateStarsHTML(review.rating)}</div>
-                <div class="review-content">${review.text}</div>
-            </div>
-        `;
-    });
-    
-    reviewsContainer.innerHTML = reviewsHTML;
+// Générer une couleur d'arrière-plan pour l'avatar basée sur la lettre
+function generateAvatarColor(letter) {
+    // Utiliser un hash simple basé sur le code ASCII
+    const charCode = letter.charCodeAt(0);
+    const hue = (charCode * 10) % 360; // Teinte entre 0 et 360
+    return `hsl(${hue}, 70%, 60%)`;
 }
+
+// Supprimer la fonction displayFallbackReviews qui n'est plus utilisée
+// Display fallback reviews if Google data is not available
+// Cette fonction n'est plus utilisée car nous voulons uniquement des avis réels
+// function displayFallbackReviews() { ... }
 
 // Generate HTML for star ratings
 function generateStarsHTML(rating, small = false) {
