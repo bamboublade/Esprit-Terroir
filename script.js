@@ -1,14 +1,56 @@
-// Global variables
+// Rechercher automatiquement le Place ID correct
+function findCorrectPlaceId() {
+    console.log("Recherche automatique du Place ID pour Esprit Terroir...");
+    
+    // Utiliser le service Places pour rechercher par texte
+    const request = {
+        query: 'Esprit Terroir Aix-en-Provence',
+        fields: ['place_id', 'formatted_address', 'name', 'geometry']
+    };
+    
+    placesService.findPlaceFromQuery(request, (results, status) => {
+        if (status === google.maps.places.PlacesServiceStatus.OK && results && results.length > 0) {
+            // Place ID trouvé automatiquement
+            const place = results[0];
+            console.log("Place ID trouvé automatiquement:", place.place_id);
+            
+            // Mettre à jour le businessData avec le nouveau Place ID
+            businessData.placeId = place.place_id;
+            
+            // Si les coordonnées sont disponibles, les mettre à jour
+            if (place.geometry && place.geometry.location) {
+                businessData.location = {
+                    lat: place.geometry.location.lat(),
+                    lng: place.geometry.location.lng()
+                };
+                
+                // Mettre à jour la position des cartes et du marqueur
+                map.setCenter(businessData.location);
+                marker.setPosition(businessData.location);
+                contactMap.setCenter(businessData.location);
+            }
+            
+            // Récupérer les informations détaillées avec le nouveau Place ID
+            fetchBusinessData();
+        } else {
+            console.error("Impossible de trouver le Place ID automatiquement:", status);
+            console.log("Utilisation des données statiques comme fallback");
+            
+            // Utiliser les données statiques
+            updateBusinessUI();
+            showBusinessInfoWindow();
+            displayFallbackReviews();
+        }
+    });
+}// Global variables
 let map;
 let contactMap;
 let placesService;
 let marker;
 let infoWindow;
 let businessData = {
-    // NOTE: Ce Place ID n'est plus valide et doit être mis à jour
-    // Pour trouver le nouveau Place ID, utilisez l'outil de recherche de Google:
-    // https://developers.google.com/maps/documentation/javascript/examples/places-placeid-finder
-    placeId: 'INVALID_PLACE_ID', // Place ID invalide - nous utilisons les données locales à la place
+    // Nous allons rechercher le Place ID automatiquement
+    placeId: null,
     location: { lat: 43.52142, lng: 5.451539 }, // Coordonnées d'Esprit Terroir
     name: 'Esprit Terroir',
     address: '1960 route des Châteaux du Mont Robert, 13290 Aix-en-Provence',
@@ -18,17 +60,14 @@ let businessData = {
     reviewsCount: 127
 };
 
-// Initialize the maps when Google Maps API is loaded
-// Exposer la fonction au niveau global pour que Google Maps puisse l'appeler
+// Initialiser la carte et rechercher automatiquement le Place ID
 window.initMaps = function() {
-    // Initialize the main business map
+    // Initialiser les cartes
     initBusinessMap();
-    
-    // Initialize the contact map
     initContactMap();
     
-    // Get business data from Google
-    fetchBusinessData();
+    // Rechercher le bon Place ID automatiquement, puis récupérer les données
+    findCorrectPlaceId();
 }
 
 // Initialize the business map
@@ -111,20 +150,17 @@ function initContactMap() {
 
 // Fetch business data from Google Places API
 function fetchBusinessData() {
-    // En raison des problèmes d'API, nous utilisons directement les données fallback
-    console.log("Utilisation des données locales (mode fallback) en raison des restrictions d'API");
+    // Vérifier si nous avons un Place ID valide
+    if (!businessData.placeId) {
+        console.log("Pas de Place ID disponible, utilisation des données statiques");
+        updateBusinessUI();
+        showBusinessInfoWindow();
+        displayFallbackReviews();
+        return;
+    }
     
-    // Mettre à jour l'interface avec les données locales
-    updateBusinessUI();
+    console.log("Récupération des données avec le Place ID:", businessData.placeId);
     
-    // Afficher l'info window avec les données locales
-    showBusinessInfoWindow();
-    
-    // Afficher les avis fallback
-    displayFallbackReviews();
-    
-    // Note: Code commenté ci-dessous à réactiver une fois les problèmes d'API résolus
-    /*
     const request = {
         placeId: businessData.placeId,
         fields: [
@@ -143,6 +179,8 @@ function fetchBusinessData() {
     
     placesService.getDetails(request, (place, status) => {
         if (status === google.maps.places.PlacesServiceStatus.OK && place) {
+            console.log("Données récupérées avec succès:", place);
+            
             // Update businessData with the fetched data
             businessData = {
                 ...businessData,
@@ -176,7 +214,7 @@ function fetchBusinessData() {
             displayFallbackReviews();
         }
     });
-    */
+}
 }
 
 // Update the UI with business data
