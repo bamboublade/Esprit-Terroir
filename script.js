@@ -1,6 +1,5 @@
 // Global variables for Google Maps
 let map;
-let placesService;
 let marker;
 let infoWindow;
 let businessData = {
@@ -36,130 +35,112 @@ function initBusinessMap() {
         mapTypeControl: true,
         streetViewControl: true,
         fullscreenControl: true,
-        styles: getMapStyles()
+        mapId: 'DEMO_MAP_ID'
     });
 
-    placesService = new google.maps.places.PlacesService(map);
     infoWindow = new google.maps.InfoWindow({ maxWidth: 320 });
 
-    marker = new google.maps.Marker({
+    marker = new google.maps.marker.AdvancedMarkerElement({
         position: businessData.location,
         map: map,
-        animation: google.maps.Animation.DROP,
         title: businessData.name
     });
 
-    marker.addListener('click', () => {
+    marker.addListener('gmp-click', () => {
         showBusinessInfoWindow();
     });
 }
 
-function findCorrectPlaceId() {
+async function findCorrectPlaceId() {
     console.log("Searching for Place ID for:", businessData.name, businessData.address);
-    if (!placesService) {
-        console.warn("PlacesService not initialized. Retrying in 1s.");
-        setTimeout(findCorrectPlaceId, 1000); // Retry if service not ready
-        return;
-    }
-
-    const request = {
-        query: `${businessData.name}, ${businessData.address}`,
-        fields: ['place_id', 'name', 'formatted_address', 'geometry']
-    };
-
-    placesService.findPlaceFromQuery(request, (results, status) => {
-        if (status === google.maps.places.PlacesServiceStatus.OK && results && results.length > 0) {
-            const place = results[0];
-            console.log("Place ID found by query:", place.place_id, "for", place.name);
-            businessData.placeId = place.place_id;
-            
-            if (place.geometry && place.geometry.location) {
-                businessData.location = {
-                    lat: place.geometry.location.lat(),
-                    lng: place.geometry.location.lng()
-                };
+    try {
+        const { places } = await google.maps.places.Place.searchByText({
+            textQuery: `${businessData.name}, ${businessData.address}`,
+            fields: ['id', 'displayName', 'formattedAddress', 'location'],
+        });
+        if (places && places.length > 0) {
+            const place = places[0];
+            console.log("Place ID found by query:", place.id, "for", place.displayName);
+            businessData.placeId = place.id;
+            if (place.location) {
+                businessData.location = { lat: place.location.lat(), lng: place.location.lng() };
                 if (map) map.setCenter(businessData.location);
-                if (marker) marker.setPosition(businessData.location);
+                if (marker) marker.position = businessData.location;
             }
             fetchBusinessDetails();
         } else {
-            console.warn("Could not find Place ID via text query:", status, ". Trying Nearby Search.");
+            console.warn("Could not find Place ID via text query. Trying Nearby Search.");
             searchNearby();
         }
-    });
+    } catch (e) {
+        console.warn("searchByText failed:", e, ". Trying Nearby Search.");
+        searchNearby();
+    }
 }
 
-function searchNearby() {
-    const nearbyRequest = {
-        location: businessData.location,
-        radius: 500, 
-        keyword: businessData.name, 
-        type: ['food', 'grocery_or_supermarket', 'store'] 
-    };
-    placesService.nearbySearch(nearbyRequest, (results, status) => {
-        if (status === google.maps.places.PlacesServiceStatus.OK && results && results.length > 0) {
-            const place = results.find(p => p.name && p.name.toLowerCase().includes("esprit terroir")) || results[0];
-            console.log("Place ID found by nearby search:", place.place_id, "for", place.name);
-            businessData.placeId = place.place_id;
-
-            if (place.geometry && place.geometry.location) {
-                businessData.location = {
-                    lat: place.geometry.location.lat(),
-                    lng: place.geometry.location.lng()
-                };
+async function searchNearby() {
+    try {
+        const { places } = await google.maps.places.Place.searchNearby({
+            fields: ['id', 'displayName', 'location'],
+            locationRestriction: { center: businessData.location, radius: 500 },
+            includedTypes: ['grocery_store'],
+            maxResultCount: 5,
+        });
+        if (places && places.length > 0) {
+            const place = places.find(p => p.displayName && p.displayName.toLowerCase().includes("esprit terroir")) || places[0];
+            console.log("Place ID found by nearby search:", place.id, "for", place.displayName);
+            businessData.placeId = place.id;
+            if (place.location) {
+                businessData.location = { lat: place.location.lat(), lng: place.location.lng() };
                 if (map) map.setCenter(businessData.location);
-                if (marker) marker.setPosition(businessData.location);
+                if (marker) marker.position = businessData.location;
             }
             fetchBusinessDetails();
         } else {
-            console.error("Failed to find Place ID via Nearby Search:", status);
-            console.log("Using fallback static data. Reviews will not be loaded from API.");
+            console.error("Failed to find Place ID via Nearby Search.");
             updateUIAfterPlaceIdFailure();
         }
-    });
+    } catch (e) {
+        console.error("searchNearby failed:", e);
+        updateUIAfterPlaceIdFailure();
+    }
 }
 
-function fetchBusinessDetails() {
+async function fetchBusinessDetails() {
     if (!businessData.placeId) {
         console.error("No Place ID available to fetch details.");
         updateUIAfterPlaceIdFailure("Aucun identifiant d'établissement Google trouvé.");
         return;
     }
     console.log("Fetching details for Place ID:", businessData.placeId);
-    const request = {
-        placeId: businessData.placeId,
-        fields: [
-            'name', 'formatted_address', 'formatted_phone_number', 'website',
-            'geometry', 'opening_hours', 'rating', 'user_ratings_total', 'reviews', 'place_id' // Ensure place_id is part of the result
-        ]
-    };
-
-    placesService.getDetails(request, (place, status) => {
-        if (status === google.maps.places.PlacesServiceStatus.OK && place) {
-            console.log("Business details fetched:", place);
-            businessData.name = place.name || businessData.name;
-            businessData.address = place.formatted_address || businessData.address;
-            businessData.phone = place.formatted_phone_number || businessData.phone;
-            businessData.website = place.website || businessData.website; 
-            if (place.geometry && place.geometry.location) {
-                businessData.location = { lat: place.geometry.location.lat(), lng: place.geometry.location.lng() };
-            }
-            businessData.rating = place.rating !== undefined ? place.rating : businessData.rating;
-            businessData.reviewsCount = place.user_ratings_total !== undefined ? place.user_ratings_total : businessData.reviewsCount;
-            businessData.reviews = place.reviews || [];
-            businessData.openingHours = place.opening_hours ? place.opening_hours.weekday_text : null;
-            businessData.isOpenNow = (place.opening_hours && typeof place.opening_hours.isOpen === 'function') ? place.opening_hours.isOpen() : null;
-            // Ensure placeId from details response is used if it's more accurate or confirmed
-            businessData.placeId = place.place_id || businessData.placeId; 
-            
-            updateBusinessUI();
-            showBusinessInfoWindow(); 
-            displayReviews(businessData.reviews); 
-        } else {
-            console.error("Error fetching business details:", status);
-            updateUIAfterPlaceIdFailure(`Erreur lors de la récupération des détails Google (${status}).`);
+    try {
+        const place = new google.maps.places.Place({ id: businessData.placeId });
+        await place.fetchFields({
+            fields: ['displayName', 'formattedAddress', 'nationalPhoneNumber', 'websiteURI',
+                     'location', 'regularOpeningHours', 'rating', 'userRatingCount', 'reviews', 'id']
+        });
+        console.log("Business details fetched:", place);
+        businessData.name = place.displayName || businessData.name;
+        businessData.address = place.formattedAddress || businessData.address;
+        businessData.phone = place.nationalPhoneNumber || businessData.phone;
+        businessData.website = place.websiteURI || businessData.website;
+        if (place.location) {
+            businessData.location = { lat: place.location.lat(), lng: place.location.lng() };
         }
-    });
+        businessData.rating = place.rating !== undefined ? place.rating : businessData.rating;
+        businessData.reviewsCount = place.userRatingCount !== undefined ? place.userRatingCount : businessData.reviewsCount;
+        businessData.reviews = place.reviews || [];
+        businessData.openingHours = place.regularOpeningHours ? place.regularOpeningHours.weekdayDescriptions : null;
+        businessData.isOpenNow = place.regularOpeningHours ? (place.regularOpeningHours.openNow ?? null) : null;
+        businessData.placeId = place.id || businessData.placeId;
+
+        updateBusinessUI();
+        showBusinessInfoWindow();
+        displayReviews(businessData.reviews);
+    } catch (e) {
+        console.error("Error fetching business details:", e);
+        updateUIAfterPlaceIdFailure(`Erreur lors de la récupération des détails Google.`);
+    }
 }
 
 function updateUIAfterPlaceIdFailure(message = "Impossible de trouver l'établissement sur Google Maps pour charger les avis.") {
@@ -282,16 +263,19 @@ function displayReviews(reviews) {
     const reviewsToShow = actualReviews.slice(0, 6); 
 
     reviewsToShow.forEach(review => {
-        const avatarText = review.author_name ? review.author_name.charAt(0).toUpperCase() : 'U';
-        const relativeTime = formatRelativeTime(review.time);
-        const reviewText = review.text ? String(review.text).replace(/\n/g, '<br>') : "<i>Cet utilisateur n'a pas laissé de commentaire.</i>";
+        const authorName = review.authorAttribution?.displayName || 'Utilisateur Google';
+        const avatarText = authorName.charAt(0).toUpperCase();
+        const publishTime = review.publishTime ? review.publishTime.getTime() / 1000 : null;
+        const relativeTime = formatRelativeTime(publishTime);
+        const rawText = review.text?.text || review.text || null;
+        const reviewText = rawText ? String(rawText).replace(/\n/g, '<br>') : "<i>Cet utilisateur n'a pas laissé de commentaire.</i>";
 
         reviewsHTML += `
             <div class="review-card">
                 <div class="review-header">
                     <div class="review-avatar" style="background-color: ${generateAvatarColor(avatarText)}">${avatarText}</div>
                     <div>
-                        <div class="review-author">${review.author_name || 'Utilisateur Google'}</div>
+                        <div class="review-author">${authorName}</div>
                         <div class="review-date">${relativeTime}</div>
                     </div>
                 </div>
