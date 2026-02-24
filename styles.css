@@ -233,7 +233,7 @@ section {
 .hero {
     height: 100vh;
     min-height: 700px; /* Ensure visibility on smaller viewports */
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://esprit-terroir.com/wp-content/uploads/2022/11/cropped-IMG_0811-scaled-3.jpg');
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('images/cropped-IMG_0811-scaled-3.jpg');
     background-size: cover;
     background-position: center;
     color: var(--light);
