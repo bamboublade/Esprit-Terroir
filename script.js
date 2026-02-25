@@ -1,24 +1,38 @@
-// Global variables for Google Maps
+const CONFIG = {
+    domain: 'espritterroir.fr',
+    baseUrl: 'https://espritterroir.fr',
+    business: {
+        location: { lat: 43.52142, lng: 5.451539 },
+        name: 'Esprit Terroir',
+        address: '1960 route des Châteaux du Mont Robert, 13290 Aix-en-Provence',
+        phone: '04 88 41 73 27',
+        email: 'contact@esprit-terroir.com',
+        website: 'https://espritterroir.fr',
+        facebook: 'https://www.facebook.com/SAS.Esprit.Terroir/',
+        instagram: 'https://www.instagram.com/esprit_terroir'
+    }
+};
+
 let map;
 let marker;
 let infoWindow;
 let businessData = {
-    placeId: null, // To be fetched
-    location: { lat: 43.52142, lng: 5.451539 }, // Default for Esprit Terroir
-    name: 'Esprit Terroir',
-    address: '1960 route des Châteaux du Mont Robert, 13290 Aix-en-Provence',
-    phone: '04 88 41 73 27',
-    email: 'contact@esprit-terroir.com', // Added email
-    website: 'https://esprit-terroir.com',
-    rating: 4.7, // Fallback
-    reviewsCount: 127, // Fallback
+    placeId: null,
+    location: CONFIG.business.location,
+    name: CONFIG.business.name,
+    address: CONFIG.business.address,
+    phone: CONFIG.business.phone,
+    email: CONFIG.business.email,
+    website: CONFIG.business.website,
+    rating: 4.7,
+    reviewsCount: 127,
     reviews: [],
     openingHours: null,
     isOpenNow: null
 };
 
 // Expose initMaps globally for Google Maps API callback
-window.initMaps = function() {
+window.initMaps = function () {
     initBusinessMap();
     findCorrectPlaceId(); // This will fetch data and then update UI + reviews
 };
@@ -117,7 +131,7 @@ async function fetchBusinessDetails() {
         const place = new google.maps.places.Place({ id: businessData.placeId });
         await place.fetchFields({
             fields: ['displayName', 'formattedAddress', 'nationalPhoneNumber', 'websiteURI',
-                     'location', 'regularOpeningHours', 'rating', 'userRatingCount', 'reviews', 'id']
+                'location', 'regularOpeningHours', 'rating', 'userRatingCount', 'reviews', 'id']
         });
         console.log("Business details fetched:", place);
         businessData.name = place.displayName || businessData.name;
@@ -161,7 +175,7 @@ function displayFallbackReviewsMessage(message) {
             </div>
         `;
     }
-     // Ensure "load more" button is hidden if there are no reviews from API
+    // Ensure "load more" button is hidden if there are no reviews from API
     const loadMoreButton = document.getElementById('load-more-reviews');
     if (loadMoreButton) loadMoreButton.style.display = 'none';
 }
@@ -170,7 +184,7 @@ function updateBusinessUI() {
     document.getElementById('average-rating').textContent = businessData.rating.toFixed(1);
     document.getElementById('rating-stars').innerHTML = generateStarsHTML(businessData.rating);
     document.getElementById('review-count').textContent = `${businessData.reviewsCount} avis`;
-    
+
     document.getElementById('business-address').textContent = businessData.address;
     document.getElementById('business-phone').textContent = businessData.phone;
     document.getElementById('business-email').textContent = businessData.email;
@@ -191,12 +205,12 @@ function updateBusinessHoursUI() {
         return;
     }
 
-    const todayJsIndex = new Date().getDay(); 
+    const todayJsIndex = new Date().getDay();
     const daysOrder = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
 
     let hoursHTML = '';
     businessData.openingHours.forEach((hourText) => {
-        const parts = hourText.split(/:\s*(.*)/s); 
+        const parts = hourText.split(/:\s*(.*)/s);
         const dayName = parts[0].trim();
         const hours = parts[1] ? parts[1].trim().replace('–', '-') : 'Fermé';
         const isToday = daysOrder[todayJsIndex] === dayName;
@@ -225,8 +239,8 @@ function updateBusinessHoursUI() {
 
 function showBusinessInfoWindow() {
     if (!infoWindow || !map || !marker) return;
-    const destinationQuery = businessData.placeId 
-        ? `&destination_place_id=${businessData.placeId}` 
+    const destinationQuery = businessData.placeId
+        ? `&destination_place_id=${businessData.placeId}`
         : `&destination=${encodeURIComponent(businessData.address)}`;
 
     const content = `
@@ -260,7 +274,7 @@ function displayReviews(reviews) {
     }
 
     let reviewsHTML = '';
-    const reviewsToShow = actualReviews.slice(0, 6); 
+    const reviewsToShow = actualReviews.slice(0, 6);
 
     reviewsToShow.forEach(review => {
         const authorName = review.authorAttribution?.displayName || 'Utilisateur Google';
@@ -320,22 +334,22 @@ function updateGoogleActionButtons(reviewsAvailable = false) {
 
 function generateAvatarColor(letter) {
     const charCode = letter.charCodeAt(0);
-    const hue = (charCode * 137.508) % 360; 
-    return `hsl(${hue}, 55%, 65%)`; 
+    const hue = (charCode * 137.508) % 360;
+    return `hsl(${hue}, 55%, 65%)`;
 }
 
 function generateStarsHTML(rating, small = false) {
-    rating = Number(rating); 
+    rating = Number(rating);
     const totalStars = 5;
     let starsHTML = '';
-    const size = small ? 16 : 18; 
+    const size = small ? 16 : 18;
 
     for (let i = 1; i <= totalStars; i++) {
-        if (i <= rating) { 
+        if (i <= rating) {
             starsHTML += `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" fill="currentColor" class="star-icon full-star" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>`;
-        } else if (i === Math.ceil(rating) && rating % 1 >= 0.4 && rating % 1 < 0.9) { 
-             starsHTML += `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" fill="currentColor" class="star-icon half-star" viewBox="0 0 16 16"><path d="M5.354 5.119 7.538.792A.516.516 0 0 1 8 .5c.183 0 .366.097.465.292l2.184 4.327 4.898.696A.537.537 0 0 1 16 6.32a.548.548 0 0 1-.17.445l-3.523 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256a.52.52 0 0 1-.146.05c-.342.06-.668-.254-.6-.642l.83-4.73L.173 6.765a.55.55 0 0 1-.172-.403.58.58 0 0 1 .085-.302.513.513 0 0 1 .37-.245l4.898-.696zM8 12.027a.5.5 0 0 1 .232.056l3.686 1.894-.694-3.957a.565.565 0 0 1 .162-.505l2.907-2.77-4.052-.576a.525.525 0 0 1-.393-.288L8.001 2.223 8 2.226v9.8z"/></svg>`;
-        } else { 
+        } else if (i === Math.ceil(rating) && rating % 1 >= 0.4 && rating % 1 < 0.9) {
+            starsHTML += `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" fill="currentColor" class="star-icon half-star" viewBox="0 0 16 16"><path d="M5.354 5.119 7.538.792A.516.516 0 0 1 8 .5c.183 0 .366.097.465.292l2.184 4.327 4.898.696A.537.537 0 0 1 16 6.32a.548.548 0 0 1-.17.445l-3.523 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256a.52.52 0 0 1-.146.05c-.342.06-.668-.254-.6-.642l.83-4.73L.173 6.765a.55.55 0 0 1-.172-.403.58.58 0 0 1 .085-.302.513.513 0 0 1 .37-.245l4.898-.696zM8 12.027a.5.5 0 0 1 .232.056l3.686 1.894-.694-3.957a.565.565 0 0 1 .162-.505l2.907-2.77-4.052-.576a.525.525 0 0 1-.393-.288L8.001 2.223 8 2.226v9.8z"/></svg>`;
+        } else {
             starsHTML += `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" fill="currentColor" class="star-icon empty-star" viewBox="0 0 16 16"><path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"/></svg>`;
         }
     }
@@ -343,9 +357,9 @@ function generateStarsHTML(rating, small = false) {
 }
 
 function formatRelativeTime(unixTimestampInSeconds) {
-    if (!unixTimestampInSeconds && unixTimestampInSeconds !==0) return 'Date inconnue';
+    if (!unixTimestampInSeconds && unixTimestampInSeconds !== 0) return 'Date inconnue';
     const now = new Date();
-    const reviewDate = new Date(unixTimestampInSeconds * 1000); 
+    const reviewDate = new Date(unixTimestampInSeconds * 1000);
     const diffMs = now.getTime() - reviewDate.getTime();
     const diffSeconds = Math.round(diffMs / 1000);
     const diffMinutes = Math.round(diffSeconds / 60);
@@ -365,7 +379,7 @@ function formatRelativeTime(unixTimestampInSeconds) {
         const months = Math.floor(diffDays / 30.44);
         return `il y a ${months} mois`;
     }
-    const years = Math.floor(diffDays / 365.25); 
+    const years = Math.floor(diffDays / 365.25);
     return `il y a ${years} an${years > 1 ? 's' : ''}`;
 }
 
@@ -378,7 +392,7 @@ function getMapStyles() {
         { featureType: "administrative.land_parcel", elementType: "labels", stylers: [{ visibility: "off" }] },
         { featureType: "poi", elementType: "geometry", stylers: [{ color: "#eeeeee" }] },
         { featureType: "poi", elementType: "labels.text", stylers: [{ visibility: "off" }] },
-        { featureType: "poi.business", stylers: [{ visibility: "off" }] }, 
+        { featureType: "poi.business", stylers: [{ visibility: "off" }] },
         { featureType: "poi.park", elementType: "geometry", stylers: [{ color: "#e5e5e5" }] },
         { featureType: "poi.park", elementType: "labels.text.fill", stylers: [{ color: "#9e9e9e" }] },
         { featureType: "road", elementType: "geometry", stylers: [{ color: "#ffffff" }] },
@@ -394,7 +408,7 @@ function getMapStyles() {
 }
 
 // DOMContentLoaded for general page interactions
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const hamburger = document.querySelector('.hamburger');
     const menu = document.querySelector('.menu');
     if (hamburger && menu) {
@@ -407,7 +421,7 @@ document.addEventListener('DOMContentLoaded', function() {
             link.addEventListener('click', () => {
                 hamburger.classList.remove('active');
                 menu.classList.remove('active');
-                document.body.style.overflow = ''; 
+                document.body.style.overflow = '';
             });
         });
     }
@@ -431,7 +445,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
+        anchor.addEventListener('click', function (e) {
             const href = this.getAttribute('href');
             if (href && href.length > 1 && href.startsWith("#")) {
                 try {
@@ -443,7 +457,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         const elementPosition = targetElement.getBoundingClientRect().top;
                         const buffer = (header && !header.classList.contains('scrolled')) ? 20 : 0;
                         const offsetPosition = elementPosition + window.pageYOffset - headerHeight - buffer;
-                        
+
                         window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
                     }
                 } catch (error) {
@@ -468,12 +482,24 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     });
-    
-    const lazyImages = document.querySelectorAll('img[data-src]');
-    lazyImages.forEach(img => {
-        img.src = img.dataset.src;
-        img.removeAttribute('data-src');
-        img.loading = 'lazy'; 
+
+    // Scroll Reveal Animation
+    const revealCallback = (entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+                // Optional: stop observing once revealed
+                // observer.unobserve(entry.target);
+            }
+        });
+    };
+
+    const revealObserver = new IntersectionObserver(revealCallback, {
+        threshold: 0.15
+    });
+
+    document.querySelectorAll('.reveal').forEach(el => {
+        revealObserver.observe(el);
     });
 
     const currentYearSpan = document.getElementById('currentYear');
@@ -482,5 +508,5 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Initialize button states with fallbacks before API data might arrive
-    updateGoogleActionButtons(false); 
+    updateGoogleActionButtons(false);
 });
