@@ -4,12 +4,13 @@ const CONFIG = {
     business: {
         location: { lat: 43.52142, lng: 5.451539 },
         name: 'Esprit Terroir',
-        address: '1960 route des Châteaux du Mont Robert, 13290 Aix-en-Provence',
+        address: '1960 route des Châteaux du Mont Robert, 13290 Aix-en-Provence, Les Milles',
         phone: '04 88 41 73 27',
         email: 'contact@esprit-terroir.com',
         website: 'https://espritterroir.fr',
         facebook: 'https://www.facebook.com/SAS.Esprit.Terroir/',
-        instagram: 'https://www.instagram.com/esprit_terroir'
+        instagram: 'https://www.instagram.com/esprit_terroir/',
+        instagramToken: 'YOUR_LONG_LIVED_ACCESS_TOKEN_HERE' // Replace after Phase 2 of roadmap
     }
 };
 
@@ -509,4 +510,58 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Initialize button states with fallbacks before API data might arrive
     updateGoogleActionButtons(false);
+
+    // Initialize Instagram feed
+    fetchInstagramFeed();
 });
+
+/**
+ * Instagram Live Feed Integration
+ * Fetches media from Instagram Graph API and sorts by likes
+ */
+async function fetchInstagramFeed() {
+    const token = CONFIG.business.instagramToken;
+    const grid = document.querySelector('.instagram-grid');
+
+    if (!token || token === 'YOUR_LONG_LIVED_ACCESS_TOKEN_HERE') {
+        console.log('Instagram Live: No token provided, showing static fallback.');
+        return;
+    }
+
+    try {
+        // Fetch from Instagram Graph API
+        const response = await fetch(`https://graph.facebook.com/v19.0/me/media?fields=id,caption,media_type,media_url,permalink,like_count,thumbnail_url,timestamp&access_token=${token}`);
+        const data = await response.json();
+
+        if (data && data.data) {
+            // Sort by likes (descending)
+            const sortedMedia = data.data.sort((a, b) => (b.like_count || 0) - (a.like_count || 0));
+
+            // Clear existing static items
+            grid.innerHTML = '';
+
+            // Display top 3
+            sortedMedia.slice(0, 3).forEach(item => {
+                const post = document.createElement('a');
+                post.href = item.permalink;
+                post.target = '_blank';
+                post.className = 'instagram-item';
+
+                post.innerHTML = `
+                    <img src="${item.media_type === 'VIDEO' ? item.thumbnail_url : item.media_url}" alt="${item.caption || 'Instagram Post'}" loading="lazy">
+                    <div class="instagram-overlay">
+                        <span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" viewBox="0 0 16 16" style="margin-right: 5px;">
+                                <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748z"/>
+                            </svg> 
+                            ${item.like_count || 0}
+                        </span>
+                    </div>
+                `;
+                grid.appendChild(post);
+            });
+        }
+    } catch (error) {
+        console.error('Error fetching Instagram feed:', error);
+    }
+}
