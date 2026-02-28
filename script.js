@@ -10,7 +10,7 @@ const CONFIG = {
         website: 'https://espritterroir.fr',
         facebook: 'https://www.facebook.com/SAS.Esprit.Terroir/',
         instagram: 'https://www.instagram.com/esprit_terroir/',
-        instagramToken: 'YOUR_LONG_LIVED_ACCESS_TOKEN_HERE' // Replace after Phase 2 of roadmap
+        instagramToken: 'IGAAMkFrdhY1pBZAFlGSmdzV1B1UjJpVEU3cXBieHA1UnhyTHNJaTlkWEVkTTNxdGV4eUI3S19EQnJWZAnRneVlHdXJzTGoyUU9BbWhvSmFJaExuNU5BeXpmTGZAmOVFWS00zVlFfemdGUkswNmZAFc1cyVTBVazNYY1VSakM2OWZAodwZDZD' // Replace after Phase 2 of roadmap
     }
 };
 
@@ -523,45 +523,128 @@ async function fetchInstagramFeed() {
     const token = CONFIG.business.instagramToken;
     const grid = document.querySelector('.instagram-grid');
 
-    if (!token || token === 'YOUR_LONG_LIVED_ACCESS_TOKEN_HERE') {
+    if (!token || token.includes('YOUR_LONG_LIVED')) {
         console.log('Instagram Live: No token provided, showing static fallback.');
         return;
     }
 
     try {
-        // Fetch from Instagram Graph API
-        const response = await fetch(`https://graph.facebook.com/v19.0/me/media?fields=id,caption,media_type,media_url,permalink,like_count,thumbnail_url,timestamp&access_token=${token}`);
+        // We try the Instagram Basic Display API first as it's the most common for "Tester Tokens"
+        // fields: like_count is NOT available in Basic Display, but works in Graph API (Business)
+        let apiUrl = `https://graph.instagram.com/me/media?fields=id,caption,media_type,media_url,permalink,thumbnail_url,timestamp&access_token=${token}`;
+
+        // If the token looks like a Business/Graph token, we could try the other endpoint, 
+        // but graph.instagram.com is generally more reliable for simple feed display.
+
+        const response = await fetch(apiUrl);
         const data = await response.json();
 
+        if (data && data.error) {
+            console.error('Instagram API Error:', data.error.message);
+            // If it fails with Basic Display, let's try the Business Graph API just in case
+            if (data.error.code === 100 || data.error.type === 'OAuthException') {
+                const businessUrl = `https://graph.facebook.com/v19.0/me/media?fields=id,caption,media_type,media_url,permalink,like_count,thumbnail_url,timestamp&access_token=${token}`;
+                const bizResponse = await fetch(businessUrl);
+                const bizData = await bizResponse.json();
+                if (bizData && bizData.data) {
+                    renderInstagramGrid(bizData.data, grid);
+                }
+            }
+            return;
+        }
+
         if (data && data.data) {
-            // Sort by likes (descending)
-            const sortedMedia = data.data.sort((a, b) => (b.like_count || 0) - (a.like_count || 0));
-
-            // Clear existing static items
-            grid.innerHTML = '';
-
-            // Display top 3
-            sortedMedia.slice(0, 3).forEach(item => {
-                const post = document.createElement('a');
-                post.href = item.permalink;
-                post.target = '_blank';
-                post.className = 'instagram-item';
-
-                post.innerHTML = `
-                    <img src="${item.media_type === 'VIDEO' ? item.thumbnail_url : item.media_url}" alt="${item.caption || 'Instagram Post'}" loading="lazy">
-                    <div class="instagram-overlay">
-                        <span>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" viewBox="0 0 16 16" style="margin-right: 5px;">
-                                <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748z"/>
-                            </svg> 
-                            ${item.like_count || 0}
-                        </span>
-                    </div>
-                `;
-                grid.appendChild(post);
-            });
+            renderInstagramFeed(data.data, grid);
+            renderInstagramGallery(data.data);
         }
     } catch (error) {
         console.error('Error fetching Instagram feed:', error);
     }
+}
+
+/**
+ * Renders the top-liked posts in the Instagram section
+ */
+function renderInstagramFeed(media, grid) {
+    if (!media || !grid) return;
+
+    // Sort by likes if available, otherwise by date
+    const sortedMedia = [...media].sort((a, b) => {
+        if (a.like_count !== undefined && b.like_count !== undefined) {
+            return b.like_count - a.like_count;
+        }
+        return new Date(b.timestamp) - new Date(a.timestamp);
+    });
+
+    // Clear existing
+    grid.innerHTML = '';
+
+    // Display top 6
+    sortedMedia.slice(0, 6).forEach(item => {
+        const post = document.createElement('a');
+        post.href = item.permalink;
+        post.target = '_blank';
+        post.className = 'instagram-item';
+
+        const likesHtml = item.like_count !== undefined ? `
+            <span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" viewBox="0 0 16 16" style="margin-right: 5px;">
+                    <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748z"/>
+                </svg> 
+                ${item.like_count}
+            </span>
+        ` : `
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 16 16">
+                <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003z" />
+            </svg>
+        `;
+
+        post.innerHTML = `
+            <img src="${item.media_type === 'VIDEO' ? item.thumbnail_url : item.media_url}" alt="${item.caption || 'Instagram Post'}" loading="lazy">
+            <div class="instagram-overlay">
+                ${likesHtml}
+            </div>
+        `;
+        grid.appendChild(post);
+    });
+}
+
+/**
+ * Randomizes and populates the Gallery section
+ */
+function renderInstagramGallery(media) {
+    const gallery = document.querySelector('.gallery-container');
+    if (!media || !gallery) return;
+
+    // Shuffle media and pick 8
+    const shuffled = [...media].sort(() => 0.5 - Math.random());
+    const selected = shuffled.slice(0, 8);
+
+    // Clear existing
+    gallery.innerHTML = '';
+
+    selected.forEach(item => {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'gallery-item';
+
+        // Use thumbnail for videos
+        const imgUrl = item.media_type === 'VIDEO' ? item.thumbnail_url : item.media_url;
+
+        itemDiv.innerHTML = `
+            <img src="${imgUrl}" alt="${item.caption || 'Galerie Esprit Terroir'}" loading="lazy">
+            <div class="gallery-overlay">
+                <span>${item.caption ? item.caption.substring(0, 30) + '...' : 'Esprit Terroir'}</span>
+            </div>
+        `;
+
+        // Wrap in link to Instagram
+        const link = document.createElement('a');
+        link.href = item.permalink;
+        link.target = '_blank';
+        link.style.textDecoration = 'none';
+        link.style.color = 'inherit';
+        link.appendChild(itemDiv);
+
+        gallery.appendChild(link);
+    });
 }
