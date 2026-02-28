@@ -408,6 +408,57 @@ function getMapStyles() {
     ];
 }
 
+/**
+ * Hero Slider Logic
+ */
+function initHeroSlider() {
+    const slider = document.querySelector('.hero-slider');
+    if (!slider) return;
+
+    // List of downloaded Instagram IDs for the hero slider
+    const heroPhotos = [
+        '17844644460488733', '17869665069349071', '17869665069349071', '17869937178462359',
+        '17870576295374738', '17884696725363426', '17886593271196391', '17890848405126681',
+        '17899790445190127', '17903976675169308', '17938483974001406', '17945920641029535',
+        '17949012009058608', '17957349257954410', '17966120432797066', '17967363038763646',
+        '17969761223822507', '17970993530862688', '17974670336712708', '18040622006305397',
+        '18041861705565946', '18052830953358070', '18054849614019773', '18060538535271017',
+        '18061659323135654', '18061738979177164', '18063758021016798', '18064277354143340',
+        '18068751791327418', '18068848777938386', '18070642136606846', '18070805126503236',
+        '18072614921001978', '18073700723314467', '18079722617305220', '18079944400763318',
+        '18080280995274195', '18080537063363365', '18081451772324720', '18086395927973274',
+        '18111907984442954', '18112306156552831', '18121911157546923', '18132685159374063',
+        '18152692666422515', '18153441646407692', '18183310096351858', '18209941291308156',
+        '18303644707215642', '18309441742173311', '18480735850078647'
+    ];
+
+    // Pick 10 random photos
+    const selected = [...heroPhotos].sort(() => 0.5 - Math.random()).slice(0, 10);
+
+    // Clear and populate slider
+    slider.innerHTML = '';
+    selected.forEach((id, index) => {
+        const slide = document.createElement('div');
+        slide.className = index === 0 ? 'slide active' : 'slide';
+        slide.style.backgroundImage = `url('images/hero/hero_${id}.jpg')`;
+        slider.appendChild(slide);
+    });
+
+    const slides = document.querySelectorAll('.hero-slider .slide');
+    if (slides.length <= 1) return;
+
+    let currentSlide = 0;
+    const slideInterval = 5000;
+
+    function nextSlide() {
+        slides[currentSlide].classList.remove('active');
+        currentSlide = (currentSlide + 1) % slides.length;
+        slides[currentSlide].classList.add('active');
+    }
+
+    setInterval(nextSlide, slideInterval);
+}
+
 // DOMContentLoaded for general page interactions
 document.addEventListener('DOMContentLoaded', function () {
     const hamburger = document.querySelector('.hamburger');
@@ -507,6 +558,9 @@ document.addEventListener('DOMContentLoaded', function () {
     if (currentYearSpan) {
         currentYearSpan.textContent = new Date().getFullYear();
     }
+
+    // Initialize Hero Slider
+    initHeroSlider();
 
     // Initialize button states with fallbacks before API data might arrive
     updateGoogleActionButtons(false);
@@ -648,3 +702,4 @@ function renderInstagramGallery(media) {
         gallery.appendChild(link);
     });
 }
+
