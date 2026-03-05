@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Charte Graphique — Esprit Terroir</title>
+<style>
+  @font-face {
+    font-family: 'Bourbon';
+    src: url('fonts/Bourbon-Regular.woff2') format('woff2'),
+         url('fonts/Bourbon-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap');
+
+  :root {
+    --kaki:       #64746A;
+    --kaki-dark:  #4D5A52;
+    --kaki-pale:  #9BA391;
+    --caramel:    #D4A373;
+    --dark:       #1C2520;
+    --ivoire:     #F8F7F2;
+    --beige:      #E9E5D9;
+    --blanc:      #FFFFFF;
+    --noir:       #0A0A0A;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background: var(--ivoire);
+    color: var(--dark);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  /* ── COVER ── */
+  .cover {
+    min-height: 100vh;
+    background: var(--dark);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 40px;
+    page-break-after: always;
+  }
+  .cover img.cover-logo {
+    width: 480px;
+    max-width: 80%;
+    filter: brightness(0) invert(1);
+    margin-bottom: 60px;
+  }
+  .cover-divider {
+    width: 80px;
+    height: 1px;
+    background: var(--caramel);
+    margin: 0 auto 40px;
+  }
+  .cover h1 {
+    font-family: 'Playfair Display', serif;
+    color: var(--ivoire);
+    font-size: 13px;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    font-weight: 400;
+    margin-bottom: 12px;
+  }
+  .cover h2 {
+    font-family: 'Playfair Display', serif;
+    color: var(--caramel);
+    font-size: 34px;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+  .cover p {
+    color: var(--kaki-pale);
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+  .cover-meta {
+    position: absolute;
+    bottom: 40px;
+    font-size: 11px;
+    color: var(--kaki-pale);
+    letter-spacing: 2px;
+  }
+
+  /* ── LAYOUT ── */
+  .page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 80px 60px;
+  }
+  .section {
+    margin-bottom: 100px;
+  }
+  .section-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--caramel);
+    margin-bottom: 12px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--beige);
+  }
+
+  /* ── IDENTITY ── */
+  .identity-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin-bottom: 40px;
+  }
+  .identity-card {
+    background: var(--blanc);
+    border: 1px solid var(--beige);
+    border-radius: 4px;
+    padding: 36px;
+  }
+  .identity-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    color: var(--kaki);
+    margin-bottom: 14px;
+  }
+  .identity-card p {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.8;
+  }
+  .brand-name-display {
+    font-family: 'Bourbon', 'Playfair Display', serif;
+    font-size: 64px;
+    color: var(--kaki);
+    letter-spacing: 4px;
+    text-align: center;
+    padding: 40px;
+    background: var(--ivoire);
+    border: 1px solid var(--beige);
+    border-radius: 4px;
+    margin-bottom: 12px;
+  }
+  .brand-baseline {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--kaki);
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  /* ── LOGO ── */
+  .logo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 40px;
+  }
+  .logo-card {
+    border-radius: 4px;
+    padding: 40px 30px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .logo-card.light { background: var(--ivoire); border: 1px solid var(--beige); }
+  .logo-card.dark  { background: var(--dark); }
+  .logo-card.kaki  { background: var(--kaki); }
+  .logo-card.beige { background: var(--beige); border: 1px solid #d8d4c8; }
+  .logo-card img   { width: 100%; max-width: 320px; margin-bottom: 20px; }
+  .logo-card .logo-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-top: auto;
+  }
+  .logo-card.light .logo-label,
+  .logo-card.beige .logo-label { color: var(--kaki); }
+  .logo-card.dark  .logo-label,
+  .logo-card.kaki  .logo-label { color: rgba(255,255,255,0.5); }
+
+  .logo-grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 40px;
+  }
+
+  /* ── PICTO & GRAVURE ── */
+  .assets-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+  .asset-card {
+    background: var(--blanc);
+    border: 1px solid var(--beige);
+    border-radius: 4px;
+    padding: 30px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .asset-card img {
+    width: 100%;
+    max-width: 140px;
+    margin-bottom: 16px;
+  }
+  .asset-card .asset-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--kaki);
+  }
+  .asset-card.dark-bg {
+    background: var(--dark);
+  }
+  .asset-card.dark-bg .asset-label {
+    color: var(--kaki-pale);
+  }
+
+  /* ── COLORS ── */
+  .colors-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+  .color-card {
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  }
+  .color-swatch {
+    height: 120px;
+    width: 100%;
+  }
+  .color-info {
+    background: var(--blanc);
+    padding: 16px;
+    border: 1px solid var(--beige);
+    border-top: none;
+  }
+  .color-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 8px;
+  }
+  .color-role {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--kaki);
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .color-values { display: flex; flex-direction: column; gap: 3px; }
+  .color-value {
+    font-size: 11px;
+    color: #777;
+    font-family: 'Montserrat', sans-serif;
+  }
+  .color-value span { font-weight: 600; color: var(--dark); }
+
+  .colors-row2 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+
+  /* ── TYPOGRAPHY ── */
+  .typo-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 30px;
+    margin-bottom: 40px;
+  }
+  .typo-card {
+    background: var(--blanc);
+    border: 1px solid var(--beige);
+    border-radius: 4px;
+    padding: 36px;
+  }
+  .typo-card .typo-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--caramel);
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+  .typo-specimen {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--beige);
+  }
+  .typo-card h3 {
+    margin-bottom: 8px;
+    color: var(--dark);
+  }
+  .typo-card .typo-meta {
+    font-size: 11px;
+    color: #888;
+    margin-top: 12px;
+  }
+  .specimen-bourbon { font-family: 'Bourbon', serif; font-size: 36px; color: var(--kaki); letter-spacing: 2px; }
+  .specimen-playfair { font-family: 'Playfair Display', serif; font-size: 30px; color: var(--dark); }
+  .specimen-montserrat { font-family: 'Montserrat', sans-serif; font-size: 14px; color: var(--dark); line-height: 1.8; }
+  .typo-usage-list { list-style: none; }
+  .typo-usage-list li {
+    font-size: 12px;
+    padding: 5px 0;
+    color: #666;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .typo-usage-list li::before {
+    content: '—';
+    color: var(--caramel);
+    font-weight: 600;
+  }
+
+  /* ── USAGE RULES ── */
+  .rules-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-bottom: 40px;
+  }
+  .rule-block {
+    border-radius: 4px;
+    padding: 30px;
+  }
+  .rule-block.do {
+    background: #f0f5f2;
+    border: 1px solid #b8cec0;
+  }
+  .rule-block.dont {
+    background: #fdf3f1;
+    border: 1px solid #e8c0b8;
+  }
+  .rule-block h3 {
+    font-size: 12px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+  .rule-block.do h3    { color: #4a7c5e; }
+  .rule-block.dont h3  { color: #c0503a; }
+  .rule-block ul       { list-style: none; }
+  .rule-block ul li {
+    font-size: 12px;
+    line-height: 1.7;
+    color: #555;
+    padding: 5px 0 5px 20px;
+    position: relative;
+  }
+  .rule-block.do ul li::before   { content: '✓'; position: absolute; left: 0; color: #4a7c5e; font-weight: 700; }
+  .rule-block.dont ul li::before { content: '✗'; position: absolute; left: 0; color: #c0503a; font-weight: 700; }
+
+  /* ── APPLICATIONS ── */
+  .apps-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+  .app-card {
+    background: var(--blanc);
+    border: 1px solid var(--beige);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .app-card-header {
+    background: var(--kaki);
+    padding: 14px 20px;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--ivoire);
+    font-weight: 600;
+  }
+  .app-card-body {
+    padding: 20px;
+    font-size: 12px;
+    color: #666;
+    line-height: 1.8;
+  }
+  .app-card-body strong { color: var(--dark); }
+
+  /* ── CONTACT ── */
+  .contact-block {
+    background: var(--dark);
+    border-radius: 4px;
+    padding: 50px 60px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+  .contact-block img {
+    width: 100%;
+    max-width: 300px;
+    filter: brightness(0) invert(1);
+  }
+  .contact-block h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--ivoire);
+    margin-bottom: 24px;
+  }
+  .contact-block p {
+    font-size: 13px;
+    color: var(--kaki-pale);
+    line-height: 2;
+  }
+  .contact-block a {
+    color: var(--caramel);
+    text-decoration: none;
+  }
+  .contact-block .divider {
+    width: 40px;
+    height: 1px;
+    background: var(--caramel);
+    margin: 20px 0;
+  }
+
+  /* ── SEPARATOR ── */
+  .ornament {
+    text-align: center;
+    color: var(--caramel);
+    margin: 60px 0;
+    font-size: 18px;
+    letter-spacing: 12px;
+  }
+
+  /* ── PRINT ── */
+  @media print {
+    body { background: white; }
+    .cover { page-break-after: always; }
+    .section { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════ COVER ══════════════ -->
+<div class="cover" style="position:relative;">
+  <img class="cover-logo" src="logos/LOGO_BASELINE_KAKI.png" alt="Esprit Terroir">
+  <div class="cover-divider"></div>
+  <h1>Document officiel</h1>
+  <h2>Charte Graphique</h2>
+  <p>Usage prestataires &amp; partenaires — 2024</p>
+  <div class="cover-meta">espritterroir.fr &nbsp;·&nbsp; Aix-en-Provence</div>
+</div>
+
+<!-- ══════════════ PAGE ══════════════ -->
+<div class="page">
+
+  <!-- ── 01. IDENTITÉ DE MARQUE ── -->
+  <div class="section">
+    <div class="section-label">01 — Identité</div>
+    <div class="section-title">La marque Esprit Terroir</div>
+
+    <div class="brand-name-display">ESPRIT TERROIR</div>
+    <div class="brand-baseline">Primeur &nbsp;—&nbsp; Épicerie Fine &nbsp;—&nbsp; Caviste</div>
+
+    <div class="identity-grid">
+      <div class="identity-card">
+        <h3>Positionnement</h3>
+        <p>Esprit Terroir est une épicerie fine de proximité implantée à Aix-en-Provence. La marque incarne une vision exigeante et authentique du commerce alimentaire local : circuits courts, produits de saison, sélection rigoureuse et relation humaine au cœur de chaque échange.</p>
+      </div>
+      <div class="identity-card">
+        <h3>Valeurs</h3>
+        <p><strong>Authenticité</strong> — Des produits vrais, tracés, sélectionnés avec soin.<br>
+        <strong>Proximité</strong> — Une boutique ancrée dans son territoire provençal.<br>
+        <strong>Qualité</strong> — Primeur, épicerie fine et cave à vins réunis sous un même toit.<br>
+        <strong>Convivialité</strong> — Une expérience d'achat chaleureuse et personnalisée.</p>
+      </div>
+      <div class="identity-card">
+        <h3>Activités</h3>
+        <p>Primeur (fruits & légumes frais de saison), Épicerie fine (fromages, charcuteries, produits artisanaux), Caviste (vins & spiritueux de la région et d'ailleurs), Plateaux & paniers sur commande.</p>
+      </div>
+      <div class="identity-card">
+        <h3>Ton de communication</h3>
+        <p>Chaleureux et accessible, jamais condescendant. Expert sans être élitiste. Le discours valorise le terroir, le savoir-faire et le lien humain. Les visuels privilégient le naturel, l'artisanal et l'authenticité provençale.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="ornament">· · ·</div>
+
+  <!-- ── 02. LOGO ── -->
+  <div class="section">
+    <div class="section-label">02 — Logo</div>
+    <div class="section-title">Déclinaisons du logo</div>
+
+    <p style="font-size:13px; color:#666; margin-bottom:36px; max-width:700px;">
+      Le logo Esprit Terroir est composé d'un picto (verre à vin, pomme et olive), du nom de marque en typographie Bourbon, de filets horizontaux et d'une baseline. Il existe en version avec baseline (usage principal) et sans baseline (usage secondaire compact).
+    </p>
+
+    <div class="logo-grid">
+      <div class="logo-card light">
+        <img src="logos/LOGO_BASELINE_KAKI.png" alt="Logo Kaki sur fond clair">
+        <div class="logo-label">Version KAKI — Fond clair (principale)</div>
+      </div>
+      <div class="logo-card dark">
+        <img src="logos/LOGO_BASELINE_BLANC.png" alt="Logo Blanc sur fond sombre">
+        <div class="logo-label">Version BLANC — Fond sombre</div>
+      </div>
+      <div class="logo-card beige">
+        <img src="logos/LOGO_BASELINE_DARK.png" alt="Logo Dark sur fond beige">
+        <div class="logo-label">Version DARK — Fond neutre</div>
+      </div>
+      <div class="logo-card light">
+        <img src="logos/LOGO_BASELINE_PALE.png" alt="Logo Pâle">
+        <div class="logo-label">Version PÂLE — Fond clair (discret)</div>
+      </div>
+    </div>
+
+    <p style="font-size:12px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--kaki); margin-bottom:20px;">Logo sans baseline</p>
+    <div class="logo-grid-3">
+      <div class="logo-card light">
+        <img src="logos/LOGO_KAKI.png" alt="Logo sans baseline Kaki">
+        <div class="logo-label">Sans baseline — KAKI</div>
+      </div>
+      <div class="logo-card dark">
+        <img src="logos/LOGO_BASELINE_BLANC.png" alt="Logo sans baseline Blanc" style="filter:brightness(0) invert(1);">
+        <div class="logo-label">Sans baseline — BLANC</div>
+      </div>
+      <div class="logo-card beige">
+        <img src="logos/LOGO_DARK.png" alt="Logo sans baseline Dark">
+        <div class="logo-label">Sans baseline — DARK</div>
+      </div>
+    </div>
+
+    <p style="font-size:12px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--kaki); margin-bottom:20px;">Picto & Gravure</p>
+    <div class="assets-grid">
+      <div class="asset-card">
+        <img src="logos/PICTO_KAKI.png" alt="Picto Kaki">
+        <div class="asset-label">Picto — KAKI</div>
+      </div>
+      <div class="asset-card dark-bg">
+        <img src="logos/PICTO_KAKI.png" alt="Picto sur fond sombre" style="filter:brightness(0) invert(1) opacity(0.9);">
+        <div class="asset-label">Picto — BLANC</div>
+      </div>
+      <div class="asset-card">
+        <img src="logos/GRAVURE_KAKI.png" alt="Gravure Kaki">
+        <div class="asset-label">Gravure — KAKI</div>
+      </div>
+      <div class="asset-card dark-bg">
+        <img src="logos/GRAVURE_KAKI.png" alt="Gravure sur fond sombre" style="filter:brightness(0) invert(1) opacity(0.85);">
+        <div class="asset-label">Gravure — BLANC</div>
+      </div>
+    </div>
+
+    <div style="background:var(--blanc); border:1px solid var(--beige); border-radius:4px; padding:28px; font-size:12px; color:#666; line-height:1.9;">
+      <strong style="color:var(--dark);">Taille minimale</strong> — Logo avec baseline : 80 mm en impression / 240 px en digital.<br>
+      <strong style="color:var(--dark);">Zone de protection</strong> — Espace libre autour du logo équivalent à la hauteur du picto.<br>
+      <strong style="color:var(--dark);">Formats disponibles</strong> — PNG (RVB, digital) · JPG · AI / EPS (vectoriel, impression) · PDF.
+    </div>
+  </div>
+
+  <div class="ornament">· · ·</div>
+
+  <!-- ── 03. COULEURS ── -->
+  <div class="section">
+    <div class="section-label">03 — Couleurs</div>
+    <div class="section-title">Palette chromatique</div>
+
+    <div class="colors-grid">
+      <div class="color-card">
+        <div class="color-swatch" style="background:#64746A;"></div>
+        <div class="color-info">
+          <div class="color-name">Kaki Terroir</div>
+          <div class="color-role">Couleur principale</div>
+          <div class="color-values">
+            <div class="color-value"><span>HEX</span> #64746A</div>
+            <div class="color-value"><span>RVB</span> 100 · 116 · 106</div>
+            <div class="color-value"><span>CMJN</span> 14 · 0 · 9 · 55</div>
+          </div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background:#1C2520;"></div>
+        <div class="color-info">
+          <div class="color-name">Vert Nuit</div>
+          <div class="color-role">Couleur structurelle</div>
+          <div class="color-values">
+            <div class="color-value"><span>HEX</span> #1C2520</div>
+            <div class="color-value"><span>RVB</span> 28 · 37 · 32</div>
+            <div class="color-value"><span>CMJN</span> 24 · 0 · 14 · 86</div>
+          </div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background:#D4A373;"></div>
+        <div class="color-info">
+          <div class="color-name">Caramel Doré</div>
+          <div class="color-role">Couleur d'accent</div>
+          <div class="color-values">
+            <div class="color-value"><span>HEX</span> #D4A373</div>
+            <div class="color-value"><span>RVB</span> 212 · 163 · 115</div>
+            <div class="color-value"><span>CMJN</span> 0 · 23 · 46 · 17</div>
+          </div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background:#9BA391;"></div>
+        <div class="color-info">
+          <div class="color-name">Kaki Pâle</div>
+          <div class="color-role">Couleur secondaire</div>
+          <div class="color-values">
+            <div class="color-value"><span>HEX</span> #9BA391</div>
+            <div class="color-value"><span>RVB</span> 155 · 163 · 145</div>
+            <div class="color-value"><span>CMJN</span> 5 · 0 · 11 · 36</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="colors-row2">
+      <div class="color-card">
+        <div class="color-swatch" style="background:#F8F7F2; border-bottom:1px solid #E9E5D9;"></div>
+        <div class="color-info">
+          <div class="color-name">Ivoire</div>
+          <div class="color-role">Fond principal</div>
+          <div class="color-values">
+            <div class="color-value"><span>HEX</span> #F8F7F2</div>
+            <div class="color-value"><span>RVB</span> 248 · 247 · 242</div>
+            <div class="color-value"><span>CMJN</span> 0 · 0 · 3 · 3</div>
+          </div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background:#E9E5D9; border-bottom:1px solid #d8d4c8;"></div>
+        <div class="color-info">
+          <div class="color-name">Beige Lin</div>
+          <div class="color-role">Fond secondaire</div>
+          <div class="color-values">
+            <div class="color-value"><span>HEX</span> #E9E5D9</div>
+            <div class="color-value"><span>RVB</span> 233 · 229 · 217</div>
+            <div class="color-value"><span>CMJN</span> 0 · 2 · 7 · 9</div>
+          </div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background:#FFFFFF; border-bottom:1px solid #E9E5D9;"></div>
+        <div class="color-info">
+          <div class="color-name">Blanc</div>
+          <div class="color-role">Fond alternatif</div>
+          <div class="color-values">
+            <div class="color-value"><span>HEX</span> #FFFFFF</div>
+            <div class="color-value"><span>RVB</span> 255 · 255 · 255</div>
+            <div class="color-value"><span>CMJN</span> 0 · 0 · 0 · 0</div>
+          </div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background:#4D5A52;"></div>
+        <div class="color-info">
+          <div class="color-name">Kaki Profond</div>
+          <div class="color-role">Hover / variante</div>
+          <div class="color-values">
+            <div class="color-value"><span>HEX</span> #4D5A52</div>
+            <div class="color-value"><span>RVB</span> 77 · 90 · 82</div>
+            <div class="color-value"><span>CMJN</span> 14 · 0 · 9 · 65</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ornament">· · ·</div>
+
+  <!-- ── 04. TYPOGRAPHIE ── -->
+  <div class="section">
+    <div class="section-label">04 — Typographie</div>
+    <div class="section-title">Système typographique</div>
+
+    <div class="typo-section">
+      <div class="typo-card">
+        <div class="typo-label">Police de marque</div>
+        <div class="typo-specimen">
+          <div class="specimen-bourbon">Esprit<br>Terroir</div>
+          <div class="typo-meta">Bourbon Regular<br>© Fort Foundry</div>
+        </div>
+        <h3 style="font-family:'Playfair Display'; font-size:13px; margin-bottom:8px;">Usage</h3>
+        <ul class="typo-usage-list">
+          <li>Logo & identité visuelle</li>
+          <li>Titres événementiels</li>
+          <li>Grands titres print</li>
+          <li>En-têtes de communication</li>
+        </ul>
+        <div style="margin-top:16px; padding-top:16px; border-top:1px solid var(--beige); font-size:11px; color:#999;">
+          Fichiers : .otf (desktop) · .woff / .woff2 (web)
+        </div>
+      </div>
+
+      <div class="typo-card">
+        <div class="typo-label">Police de titres web</div>
+        <div class="typo-specimen">
+          <div class="specimen-playfair">Une sélection<br>d'exception</div>
+          <div class="typo-meta">Playfair Display<br>Regular / SemiBold / Bold — Google Fonts</div>
+        </div>
+        <h3 style="font-family:'Playfair Display'; font-size:13px; margin-bottom:8px;">Usage</h3>
+        <ul class="typo-usage-list">
+          <li>Titres de sections (H1, H2, H3)</li>
+          <li>Citations et mises en avant</li>
+          <li>Sous-titres print</li>
+          <li>Éditorial digital</li>
+        </ul>
+        <div style="margin-top:16px; padding-top:16px; border-top:1px solid var(--beige); font-size:11px; color:#999;">
+          Graisses : 400 · 600 · 700
+        </div>
+      </div>
+
+      <div class="typo-card">
+        <div class="typo-label">Police de corps</div>
+        <div class="typo-specimen">
+          <div class="specimen-montserrat">Produits frais et locaux sélectionnés avec passion pour vous offrir le meilleur du terroir provençal.</div>
+          <div class="typo-meta">Montserrat<br>Light / Regular / Medium / SemiBold — Google Fonts</div>
+        </div>
+        <h3 style="font-family:'Playfair Display'; font-size:13px; margin-bottom:8px;">Usage</h3>
+        <ul class="typo-usage-list">
+          <li>Corps de texte (300 / 400)</li>
+          <li>Légendes et labels (500)</li>
+          <li>Boutons et CTAs (600)</li>
+          <li>Navigation et UI</li>
+        </ul>
+        <div style="margin-top:16px; padding-top:16px; border-top:1px solid var(--beige); font-size:11px; color:#999;">
+          Graisses : 300 · 400 · 500 · 600 · 700
+        </div>
+      </div>
+    </div>
+
+    <div style="background:var(--dark); border-radius:4px; padding:36px; display:grid; grid-template-columns:1fr 1fr 1fr; gap:40px;">
+      <div>
+        <div style="font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--caramel); margin-bottom:16px;">H1 — Titre principal</div>
+        <div style="font-family:'Playfair Display',serif; font-size:28px; color:var(--ivoire); line-height:1.3;">Une expérience gourmande</div>
+        <div style="font-size:10px; color:var(--kaki-pale); margin-top:10px;">Playfair Display Bold · 28–48px</div>
+      </div>
+      <div>
+        <div style="font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--caramel); margin-bottom:16px;">H2 — Sous-titre</div>
+        <div style="font-family:'Playfair Display',serif; font-size:20px; color:var(--ivoire); line-height:1.4;">Nos services &amp; savoir-faire</div>
+        <div style="font-size:10px; color:var(--kaki-pale); margin-top:10px;">Playfair Display SemiBold · 20–32px</div>
+      </div>
+      <div>
+        <div style="font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--caramel); margin-bottom:16px;">Corps</div>
+        <div style="font-family:'Montserrat',sans-serif; font-size:13px; color:var(--kaki-pale); line-height:1.8;">Chez nous, chaque produit est sélectionné avec soin, en privilégiant les circuits courts et les producteurs locaux.</div>
+        <div style="font-size:10px; color:var(--kaki-pale); margin-top:10px;">Montserrat Regular · 13–16px</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ornament">· · ·</div>
+
+  <!-- ── 05. RÈGLES D'USAGE ── -->
+  <div class="section">
+    <div class="section-label">05 — Règles d'usage</div>
+    <div class="section-title">Utilisation correcte de la marque</div>
+
+    <div class="rules-grid">
+      <div class="rule-block do">
+        <h3>À faire</h3>
+        <ul>
+          <li>Utiliser le logo sur fond uni (ivoire, blanc, kaki, vert nuit)</li>
+          <li>Respecter les proportions d'origine du logo</li>
+          <li>Maintenir la zone de protection autour du logo</li>
+          <li>Utiliser la version blanche sur fonds sombres</li>
+          <li>Associer la marque à des visuels de qualité, lumineux et naturels</li>
+          <li>Respecter la palette de couleurs officielle</li>
+          <li>Utiliser les polices Bourbon et Playfair Display pour les titres</li>
+          <li>Citer la baseline complète si l'espace le permet</li>
+        </ul>
+      </div>
+      <div class="rule-block dont">
+        <h3>À ne pas faire</h3>
+        <ul>
+          <li>Déformer, étirer ou tourner le logo</li>
+          <li>Modifier les couleurs officielles du logo</li>
+          <li>Placer le logo sur fond complexe, photo ou motif sans fond uni</li>
+          <li>Ajouter des effets (ombre, relief, contour) sur le logo</li>
+          <li>Utiliser des couleurs hors charte pour les supports de communication</li>
+          <li>Changer la typographie du logo</li>
+          <li>Réduire le logo en dessous de la taille minimale (80 mm / 240 px)</li>
+          <li>Dissocier le picto du nom sans autorisation</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="ornament">· · ·</div>
+
+  <!-- ── 06. SUPPORTS ── -->
+  <div class="section">
+    <div class="section-label">06 — Supports de communication</div>
+    <div class="section-title">Applications et supports existants</div>
+
+    <div class="apps-grid">
+      <div class="app-card">
+        <div class="app-card-header">Print — Boutique</div>
+        <div class="app-card-body">
+          <strong>Panneaux intérieurs</strong> (×2)<br>
+          <strong>Bâche</strong> façade<br>
+          <strong>Enseigne</strong> lumineuse<br>
+          <strong>Covering camion</strong> (face + arrière)
+        </div>
+      </div>
+      <div class="app-card">
+        <div class="app-card-header">Print — Relation client</div>
+        <div class="app-card-body">
+          <strong>Carte de visite</strong><br>
+          <strong>Carte de correspondance</strong><br>
+          <strong>Carte de fidélité</strong><br>
+          <strong>Programme fidélité</strong><br>
+          <strong>Flyer</strong> A4 recto/verso
+        </div>
+      </div>
+      <div class="app-card">
+        <div class="app-card-header">Print — Promotionnel</div>
+        <div class="app-card-body">
+          <strong>Affiche plateau charcuterie</strong><br>
+          <strong>Affiche paniers semainiers</strong><br>
+          <strong>Affiche avis Google</strong><br>
+          <strong>Affiches événements</strong><br>
+          <strong>Affiches inauguration</strong>
+        </div>
+      </div>
+      <div class="app-card">
+        <div class="app-card-header">Digital — Réseaux sociaux</div>
+        <div class="app-card-body">
+          <strong>QR Code Google Avis</strong><br>
+          <strong>QR Code Facebook</strong><br>
+          <strong>QR Code Instagram</strong><br>
+          <strong>Visuels Stories/Posts</strong><br>
+          SMS événementiels
+        </div>
+      </div>
+      <div class="app-card">
+        <div class="app-card-header">Digital — Web</div>
+        <div class="app-card-body">
+          <strong>Site web</strong> espritterroir.fr<br>
+          Hébergé sur GitHub Pages<br>
+          One-page responsive<br>
+          Intégration Google Maps & Avis<br>
+          Sitemap SEO
+        </div>
+      </div>
+      <div class="app-card">
+        <div class="app-card-header">Fichiers source disponibles</div>
+        <div class="app-card-body">
+          Logos vectoriels <strong>.ai / .eps</strong><br>
+          Logos <strong>.png / .jpg</strong> RVB et CMJN<br>
+          Police <strong>Bourbon Regular</strong> (.otf / .woff)<br>
+          Covering camion <strong>.pdf</strong><br>
+          Panneaux <strong>.pdf</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ornament">· · ·</div>
+
+  <!-- ── 07. CONTACT ── -->
+  <div class="section">
+    <div class="section-label">07 — Contact &amp; Ressources</div>
+    <div class="section-title">Coordonnées & accès aux fichiers</div>
+
+    <div class="contact-block">
+      <div>
+        <img src="logos/LOGO_BASELINE_BLANC.png" alt="Esprit Terroir">
+      </div>
+      <div>
+        <h3>Esprit Terroir</h3>
+        <div class="divider"></div>
+        <p>
+          <strong style="color:var(--ivoire);">Adresse</strong><br>
+          1960 route des Châteaux de Mont Robert<br>
+          13290 Aix-en-Provence, France<br><br>
+          <strong style="color:var(--ivoire);">Téléphone</strong><br>
+          <a href="tel:+33488417327">04 88 41 73 27</a><br><br>
+          <strong style="color:var(--ivoire);">Email</strong><br>
+          <a href="mailto:contact@esprit-terroir.com">contact@esprit-terroir.com</a><br><br>
+          <strong style="color:var(--ivoire);">Site web</strong><br>
+          <a href="https://espritterroir.fr" target="_blank">espritterroir.fr</a><br><br>
+          <strong style="color:var(--ivoire);">Réseaux sociaux</strong><br>
+          Facebook · Instagram : <em>@espritterroir</em>
+        </p>
+      </div>
+    </div>
+
+    <div style="margin-top:30px; background:var(--blanc); border:1px solid var(--beige); border-radius:4px; padding:28px; font-size:12px; color:#666; line-height:1.9;">
+      <strong style="color:var(--dark); display:block; margin-bottom:10px;">Utilisation de la marque par des tiers</strong>
+      Toute utilisation du logo, des visuels ou du nom Esprit Terroir par un prestataire, partenaire ou sponsor doit faire l'objet d'une validation préalable. Les fichiers sources haute définition sont transmis sur demande auprès du responsable communication. Les règles de cette charte graphique sont à respecter dans leur intégralité.<br><br>
+      <em style="color:#999;">Charte réalisée par Clémentine (agence créative) · Version 2024 · Document destiné aux prestataires et partenaires officiels.</em>
+    </div>
+  </div>
+
+</div><!-- /page -->
+</body>
+</html>
