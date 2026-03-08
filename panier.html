@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Paniers gourmands Esprit Terroir — sélection de saison, paniers événements mariage & séminaire, commandes groupées entreprises et collectivités. Réservation recommandée.">
+    <link rel="canonical" href="https://espritterroir.fr/panier.html" />
+
+    <!-- Open Graph -->
+    <meta property="fb:app_id" content="1347449477194757">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://espritterroir.fr/panier.html">
+    <meta property="og:title" content="Paniers & Commandes Groupées | Esprit Terroir">
+    <meta property="og:description" content="Paniers gourmands de saison, paniers événements et commandes groupées pour entreprises et collectivités à Aix-en-Provence.">
+    <meta property="og:image" content="https://espritterroir.fr/images/cropped-Sans-titre-1-2.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://espritterroir.fr/panier.html">
+    <meta property="twitter:title" content="Paniers & Commandes Groupées | Esprit Terroir">
+    <meta property="twitter:description" content="Paniers gourmands de saison, événements et commandes groupées à Aix-en-Provence.">
+    <meta property="twitter:image" content="https://espritterroir.fr/images/cropped-Sans-titre-1-2.jpg">
+
+    <title>Paniers & Commandes Groupées | Esprit Terroir</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="images/cropped-cropped-cropped-cropped-LOGO_BASELINE_ESPRIT_TERROIR_KAKI_RVB.png" sizes="32x32" />
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://espritterroir.fr/" },
+        { "@type": "ListItem", "position": 2, "name": "Nos Services", "item": "https://espritterroir.fr/#services" },
+        { "@type": "ListItem", "position": 3, "name": "Paniers & Commandes Groupées", "item": "https://espritterroir.fr/panier.html" }
+      ]
+    }
+    </script>
+
+    <style>
+        /* ── Page Hero ── */
+        .page-hero {
+            position: relative;
+            height: 420px;
+            background-image: linear-gradient(rgba(28,37,32,0.60), rgba(28,37,32,0.72)),
+                              url('images/cropped-Sans-titre-1-2.jpg');
+            background-size: cover;
+            background-position: center 60%;
+            display: flex;
+            align-items: flex-end;
+            padding-bottom: 60px;
+        }
+        .page-hero .container { position: relative; z-index: 1; }
+        .page-hero-label {
+            display: inline-block;
+            font-size: 11px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--secondary);
+            margin-bottom: 14px;
+        }
+        .page-hero h1 {
+            font-family: var(--font-primary);
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            color: #fff;
+            margin-bottom: 16px;
+            line-height: 1.15;
+        }
+        .page-hero-badges { display: flex; gap: 10px; flex-wrap: wrap; }
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.25);
+            color: #fff;
+            font-size: 12px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            backdrop-filter: blur(4px);
+        }
+
+        /* ── Breadcrumb ── */
+        .breadcrumb {
+            padding: 18px 0;
+            font-size: 12px;
+            color: #888;
+            border-bottom: 1px solid var(--gray-light);
+        }
+        .breadcrumb a { color: var(--primary); text-decoration: none; }
+        .breadcrumb span { margin: 0 8px; }
+
+        /* ── Tabs nav ── */
+        .panier-tabs {
+            display: flex;
+            gap: 0;
+            border-bottom: 2px solid var(--gray-light);
+            margin-bottom: 50px;
+        }
+        .panier-tab {
+            padding: 14px 28px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: #888;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            transition: color 0.2s, border-color 0.2s;
+            text-decoration: none;
+        }
+        .panier-tab.active,
+        .panier-tab:hover {
+            color: var(--primary-dark);
+            border-bottom-color: var(--primary);
+        }
+
+        /* ── Content layout ── */
+        .panier-content { padding: 70px 0 90px; }
+
+        /* ── Offer cards ── */
+        .offer-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 60px;
+        }
+        .offer-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 32px 24px;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+            border-top: 3px solid var(--primary);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .offer-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 28px rgba(0,0,0,0.1);
+        }
+        .offer-icon {
+            font-size: 2rem;
+            margin-bottom: 16px;
+            display: block;
+        }
+        .offer-card h3 {
+            font-family: var(--font-primary);
+            font-size: 1.15rem;
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+        }
+        .offer-card p {
+            font-size: 0.88rem;
+            color: #666;
+            line-height: 1.7;
+            margin-bottom: 16px;
+        }
+        .offer-tag {
+            display: inline-block;
+            background: #f0f4f1;
+            color: var(--primary);
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 12px;
+        }
+
+        /* ── Section title ── */
+        .content-section { margin-bottom: 60px; }
+        .content-section-title {
+            font-family: var(--font-primary);
+            font-size: 1.5rem;
+            color: var(--primary-dark);
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        /* ── Saison list ── */
+        .saison-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+        .saison-card {
+            background: var(--light);
+            border-radius: 10px;
+            padding: 20px 16px;
+            text-align: center;
+        }
+        .saison-card .season-icon { font-size: 1.8rem; display: block; margin-bottom: 8px; }
+        .saison-card h4 {
+            font-family: var(--font-primary);
+            font-size: 0.95rem;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+        .saison-card p { font-size: 0.78rem; color: #777; line-height: 1.5; }
+
+        /* ── Events ── */
+        .event-list {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .event-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            font-size: 0.92rem;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        .event-icon {
+            width: 44px;
+            height: 44px;
+            background: #f0f4f1;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        /* ── Process steps ── */
+        .steps {
+            display: flex;
+            gap: 0;
+            margin: 40px 0;
+            position: relative;
+        }
+        .steps::before {
+            content: '';
+            position: absolute;
+            top: 24px;
+            left: 60px;
+            right: 60px;
+            height: 2px;
+            background: var(--gray-light);
+            z-index: 0;
+        }
+        .step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        .step-num {
+            width: 48px;
+            height: 48px;
+            background: var(--primary);
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+            margin: 0 auto 12px;
+        }
+        .step h4 {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 4px;
+        }
+        .step p { font-size: 0.78rem; color: #888; }
+
+        /* ── CTA block ── */
+        .cta-block {
+            background: var(--primary-dark);
+            border-radius: 12px;
+            padding: 48px 40px;
+            text-align: center;
+            color: #fff;
+            margin-top: 60px;
+        }
+        .cta-block h2 {
+            font-family: var(--font-primary);
+            font-size: 1.8rem;
+            margin-bottom: 12px;
+        }
+        .cta-block p {
+            font-size: 0.95rem;
+            opacity: 0.8;
+            margin-bottom: 32px;
+            max-width: 560px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .cta-btns {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+        .btn-wa {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #25D366;
+            color: #fff;
+            text-decoration: none;
+            padding: 13px 26px;
+            border-radius: 28px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        .btn-wa:hover { background: #128C7E; }
+        .btn-tel-out {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.15);
+            color: #fff;
+            text-decoration: none;
+            padding: 13px 26px;
+            border-radius: 28px;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+        .btn-tel-out:hover { background: rgba(255,255,255,0.25); }
+
+        /* ── Responsive ── */
+        @media (max-width: 992px) {
+            .offer-grid { grid-template-columns: 1fr; }
+            .saison-grid { grid-template-columns: repeat(2, 1fr); }
+            .steps { flex-direction: column; gap: 20px; }
+            .steps::before { display: none; }
+            .step { display: flex; align-items: flex-start; gap: 16px; text-align: left; }
+            .step-num { flex-shrink: 0; }
+        }
+        @media (max-width: 600px) {
+            .saison-grid { grid-template-columns: 1fr 1fr; }
+            .cta-block { padding: 36px 24px; }
+            .page-hero { height: 300px; }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <a href="index.html#home">
+                        <img src="images/cropped-cropped-cropped-cropped-LOGO_BASELINE_ESPRIT_TERROIR_KAKI_RVB.png"
+                            alt="Esprit Terroir Logo" width="200" height="50">
+                    </a>
+                </div>
+                <ul class="menu">
+                    <li><a href="index.html#about">Qui sommes-nous</a></li>
+                    <li><a href="index.html#services">Nos Services</a></li>
+                    <li><a href="primeur.html">Primeur</a></li>
+                    <li><a href="epicerie-fine.html">Épicerie Fine</a></li>
+                    <li><a href="caviste.html">Caviste</a></li>
+                    <li><a href="poulet-roti.html">Poulet Rôti</a></li>
+                    <li><a href="panier.html" class="active">Paniers</a></li>
+                    <li><a href="index.html#gallery">Galerie</a></li>
+                    <li><a href="index.html#google-business">Avis & Infos</a></li>
+                    <li><a href="index.html#whatsapp">Actualités</a></li>
+                    <li><a href="index.html#faq">FAQ</a></li>
+                </ul>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Page Hero -->
+    <section class="page-hero">
+        <div class="container">
+            <span class="page-hero-label">Nos Services</span>
+            <h1>Paniers & Commandes Groupées</h1>
+            <div class="page-hero-badges">
+                <span class="badge">🧺 Sélection de saison</span>
+                <span class="badge">💍 Événements & Mariages</span>
+                <span class="badge">🏢 Entreprises & Collectivités</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bandeau prix indicatifs -->
+    <div class="prix-disclaimer">
+        <div class="container">
+            <p><strong>Prix & disponibilités à titre indicatif</strong> — Soumis aux aléas climatiques, aux conditions du marché et aux disponibilités des producteurs, les prix peuvent évoluer quotidiennement sans préavis. Les informations affichées ne constituent pas une offre contractuelle et valent pour l'ensemble des contenus du site.</p>
+        </div>
+    </div>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+        <div class="container">
+            <a href="index.html">Accueil</a>
+            <span>›</span>
+            <a href="index.html#services">Nos Services</a>
+            <span>›</span>
+            Paniers & Commandes Groupées
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="panier-content">
+        <div class="container">
+
+            <!-- 3 offer types -->
+            <div class="offer-grid">
+                <div class="offer-card">
+                    <span class="offer-icon">🧺</span>
+                    <h3>Panier du Moment</h3>
+                    <p>Une sélection gourmande composée selon les arrivages et la saison — fruits, légumes, épicerie fine, fromages, charcuterie ou vins. Chaque panier est unique.</p>
+                    <span class="offer-tag">Réservation recommandée</span>
+                </div>
+                <div class="offer-card">
+                    <span class="offer-icon">🎊</span>
+                    <h3>Panier Événement</h3>
+                    <p>Mariage, séminaire, anniversaire, pot de départ… Nous composons des paniers sur mesure pour vos occasions spéciales, avec les meilleurs produits du terroir.</p>
+                    <span class="offer-tag">Réservation 1 semaine avant</span>
+                </div>
+                <div class="offer-card">
+                    <span class="offer-icon">🏢</span>
+                    <h3>Commandes Groupées</h3>
+                    <p>Comités d'entreprise, collectivités, associations — bénéficiez d'une sélection adaptée à vos volumes et à vos budgets, avec remise pour les grandes quantités.</p>
+                    <span class="offer-tag">Réservation 1 semaine avant</span>
+                </div>
+            </div>
+
+            <!-- Paniers de saison -->
+            <div class="content-section">
+                <h2 class="content-section-title">Le Panier du Moment — au fil des saisons</h2>
+                <p style="color:#555; line-height:1.8; margin-bottom:30px;">
+                    Notre sélection évolue chaque semaine en fonction des arrivages. Nous travaillons avec des producteurs locaux de la région Provence-Alpes-Côte d'Azur pour vous garantir fraîcheur et authenticité. Le contenu du panier est une surprise gourmande qui reflète le meilleur de ce que la saison a à offrir.
+                </p>
+                <div class="saison-grid">
+                    <div class="saison-card">
+                        <span class="season-icon">🌸</span>
+                        <h4>Printemps</h4>
+                        <p>Asperges, fraises, petits pois, radis, fromages frais de chèvre, miel de printemps</p>
+                    </div>
+                    <div class="saison-card">
+                        <span class="season-icon">☀️</span>
+                        <h4>Été</h4>
+                        <p>Tomates, courgettes, poivrons, pêches, melons, tapenade, rosé de Provence</p>
+                    </div>
+                    <div class="saison-card">
+                        <span class="season-icon">🍂</span>
+                        <h4>Automne</h4>
+                        <p>Courges, figues, raisins, champignons, châtaignes, vins de caractère, saucissons</p>
+                    </div>
+                    <div class="saison-card">
+                        <span class="season-icon">❄️</span>
+                        <h4>Hiver</h4>
+                        <p>Agrumes, truffes, foie gras, fromages affinés, confits, vins chauds, épices</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Événements -->
+            <div class="content-section">
+                <h2 class="content-section-title">Paniers Événements & Occasions Spéciales</h2>
+                <p style="color:#555; line-height:1.8; margin-bottom:30px;">
+                    Vous organisez un événement et souhaitez proposer à vos invités des produits du terroir de qualité ? Nous concevons des paniers personnalisés pour toutes les occasions, en accord avec votre budget et vos préférences.
+                </p>
+                <ul class="event-list">
+                    <li>
+                        <span class="event-icon">💍</span>
+                        <div>
+                            <strong>Mariage & Réceptions</strong><br>
+                            <span style="color:#666;">Paniers cadeaux pour les convives, cocktail de bienvenue, corbeilles de fruits et fromages pour le buffet. Composition sur mesure à partir de 1 semaine avant l'événement.</span>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="event-icon">💼</span>
+                        <div>
+                            <strong>Séminaires & Team Building</strong><br>
+                            <span style="color:#666;">Paniers découverte terroir pour vos équipes, coffrets dégustation vins et épicerie fine, buffets régionaux. Idéal pour créer une pause conviviale et authentique lors de vos événements professionnels.</span>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="event-icon">🎂</span>
+                        <div>
+                            <strong>Anniversaires & Fêtes Familiales</strong><br>
+                            <span style="color:#666;">Corbeilles gourmandes personnalisables, avec ou sans champagne, pour célébrer les moments qui comptent. Selon vos goûts et vos contraintes alimentaires.</span>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="event-icon">🎁</span>
+                        <div>
+                            <strong>Cadeaux d'Affaires & Coffrets</strong><br>
+                            <span style="color:#666;">Offrez un coffret Esprit Terroir à vos clients, partenaires ou collaborateurs. Une belle façon de valoriser le terroir provençal et de marquer les esprits.</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Commandes groupées -->
+            <div class="content-section">
+                <h2 class="content-section-title">Commandes Groupées — Entreprises & Collectivités</h2>
+                <p style="color:#555; line-height:1.8; margin-bottom:30px;">
+                    Comités d'entreprise, administrations, associations, écoles — nous répondons aux commandes en volume avec le même soin apporté à la qualité des produits. Que ce soit pour des paniers de Noël, des distributions de fruits frais en entreprise ou des événements institutionnels, nous adaptons notre offre à vos besoins.
+                </p>
+                <ul class="event-list">
+                    <li>
+                        <span class="event-icon">🧑‍🤝‍🧑</span>
+                        <div>
+                            <strong>Paniers de Noël & Fêtes de fin d'année</strong><br>
+                            <span style="color:#666;">Commandes groupées pour l'ensemble de vos salariés ou adhérents. Composition standard ou personnalisée, avec un tarif dégressif selon les volumes.</span>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="event-icon">🥗</span>
+                        <div>
+                            <strong>Distribution de fruits & légumes frais</strong><br>
+                            <span style="color:#666;">Approvisionnement régulier en fruits et légumes frais pour vos cantines, restaurants d'entreprise ou distributions hebdomadaires à vos équipes.</span>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="event-icon">🏫</span>
+                        <div>
+                            <strong>Collectivités & Institutions</strong><br>
+                            <span style="color:#666;">Mairies, EHPAD, associations — nous proposons des devis adaptés aux contraintes budgétaires et logistiques des structures publiques et associatives.</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Comment commander -->
+            <div class="content-section">
+                <h2 class="content-section-title">Comment commander ?</h2>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-num">1</div>
+                        <div>
+                            <h4>Contactez-nous</h4>
+                            <p>Par téléphone, WhatsApp ou en boutique</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-num">2</div>
+                        <div>
+                            <h4>Définissez votre besoin</h4>
+                            <p>Type de panier, budget, occasion, quantité</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-num">3</div>
+                        <div>
+                            <h4>Réservation confirmée</h4>
+                            <p>Au moins 1 semaine avant pour les événements & commandes groupées</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-num">4</div>
+                        <div>
+                            <h4>Retrait en boutique</h4>
+                            <p>À la date convenue — prêt à offrir ou à consommer</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA -->
+            <div class="cta-block">
+                <h2>Prêt à composer votre panier ?</h2>
+                <p>Contactez-nous pour discuter de votre projet — panier de saison, événement ou commande groupée. Nous nous adaptons à vos envies et à votre budget.</p>
+                <div class="cta-btns">
+                    <a href="https://wa.me/33651095266" target="_blank" rel="noopener" class="btn-wa">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.588 6.588 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/>
+                        </svg>
+                        Nous contacter par WhatsApp
+                    </a>
+                    <a href="tel:0651095266" class="btn-tel-out">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.568 17.568 0 0 0 4.168 6.608 17.569 17.569 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.678.678 0 0 0-.58-.122l-2.19.547a1.745 1.745 0 0 1-1.657-.459L5.482 8.062a1.745 1.745 0 0 1-.46-1.657l.548-2.19a.678.678 0 0 0-.122-.58L3.654 1.328z"/>
+                        </svg>
+                        06 51 09 52 66
+                    </a>
+                    <a href="tel:0488417327" class="btn-tel-out">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.568 17.568 0 0 0 4.168 6.608 17.569 17.569 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.678.678 0 0 0-.58-.122l-2.19.547a1.745 1.745 0 0 1-1.657-.459L5.482 8.062a1.745 1.745 0 0 1-.46-1.657l.548-2.19a.678.678 0 0 0-.122-.58L3.654 1.328z"/>
+                        </svg>
+                        04 88 41 73 27
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>© <span id="currentYear">2026</span> Esprit Terroir — <a href="index.html">Accueil</a> · <a href="index.html#services">Nos Services</a> · <a href="politique-de-confidentialite.html">Politique de Confidentialité</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/33651095266" class="whatsapp-btn" target="_blank" aria-label="Contactez-nous sur WhatsApp">
+        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.588 6.588 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/>
+        </svg>
+    </a>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

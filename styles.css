@@ -196,12 +196,8 @@ section {
 
 .logo img {
     height: 50px;
-    transition: var(--transition);
 }
 
-.header.scrolled .logo img {
-    height: 40px;
-}
 
 .menu {
     display: flex;
@@ -361,8 +357,14 @@ section {
 
 .services-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 30px;
+}
+
+@media (max-width: 768px) {
+    .services-container {
+        grid-template-columns: 1fr;
+    }
 }
 
 .service-card {
@@ -418,6 +420,57 @@ section {
 
 .service-content a:hover svg {
     transform: translateX(5px);
+}
+
+.service-card--featured {
+    border: 2px solid var(--primary);
+}
+
+.service-card--wide {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: row;
+}
+
+.service-card--wide .service-img {
+    flex: 0 0 400px;
+    height: auto;
+    min-height: 250px;
+}
+
+.service-card--wide .service-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 36px 40px;
+}
+
+@media (max-width: 768px) {
+    .service-card--wide {
+        flex-direction: column;
+    }
+    .service-card--wide .service-img {
+        flex: none;
+        height: 220px;
+    }
+}
+
+.service-img {
+    position: relative;
+}
+
+.service-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: var(--primary-dark);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    padding: 5px 12px;
+    border-radius: 20px;
 }
 
 /* Gallery Section */
@@ -1276,9 +1329,6 @@ section {
         height: 40px;
     }
 
-    .header.scrolled .logo img {
-        height: 35px;
-    }
 
     .google-header {
         flex-direction: column;
@@ -1550,6 +1600,26 @@ section {
         width: 45px;
         height: 45px;
     }
+}
+
+/* ── Bandeau prix indicatifs ── */
+.prix-disclaimer {
+    background: var(--primary);
+    padding: 5px 0;
+    text-align: center;
+}
+
+.prix-disclaimer p {
+    font-size: 8px;
+    color: #9BA391;
+    letter-spacing: 0.3px;
+    line-height: 1.4;
+    margin: 0;
+}
+
+.prix-disclaimer strong {
+    color: #F8F7F2;
+    font-weight: 600;
 }
 
 /* ── WhatsApp Section ── */
