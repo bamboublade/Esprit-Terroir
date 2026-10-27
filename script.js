@@ -248,10 +248,12 @@ function showBusinessInfoWindow() {
         <div class="map-info-window">
             <div class="map-info-title">${businessData.name}</div>
             <div class="map-info-address">${businessData.address}</div>
+            <!-- Note Google temporairement masquée — à réactiver avec les avis (voir README.md)
             <div class="map-info-rating">
                 <span class="map-info-rating-score">${businessData.rating.toFixed(1)}</span>
                 <div class="map-info-rating-stars">${generateStarsHTML(businessData.rating, true)}</div>
             </div>
+            -->
             <div class="map-info-actions">
                 <a href="https://www.google.com/maps/dir/?api=1${destinationQuery}" target="_blank" class="map-info-button">Itinéraire</a>
                 <a href="tel:${businessData.phone.replace(/\s/g, '')}" class="map-info-button">Appeler</a>

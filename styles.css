@@ -559,6 +559,10 @@ section {
     padding: 30px;
 }
 
+.google-header[hidden] {
+    display: none;
+}
+
 .google-header {
     display: flex;
     align-items: center;
