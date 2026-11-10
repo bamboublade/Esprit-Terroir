@@ -1,5 +1,67 @@
 # Esprit-Terroir
 
+## ⚠️ Site en maintenance (depuis le 10/11/2026)
+
+Le site est actuellement **hors ligne pour maintenance** (commit `366a59b`, v1.03.6). Toutes les pages publiques redirigent vers `maintenance.html`.
+
+### Fonctionnement
+
+GitHub Pages ne permet pas de redirection côté serveur : chaque page redirige elle-même, dès le début de son `<head>`, via ce bloc :
+
+```html
+<!-- MAINTENANCE : supprimer ces 2 lignes pour remettre la page en ligne -->
+<meta http-equiv="refresh" content="0; url=/maintenance.html"><script>location.replace('/maintenance.html');</script>
+```
+
+| Fichier | Rôle pendant la maintenance |
+|---|---|
+| `maintenance.html` | Page de maintenance (charte graphique, `noindex`), coordonnées, WhatsApp, téléphone, réseaux |
+| `index.html`, `primeur.html`, `epicerie-fine.html`, `caviste.html`, `panier.html`, `poulet-roti.html` | Contiennent le bloc de redirection ci-dessus. Leur contenu d'origine est intact |
+| `404.html` | Créé pour la maintenance : toute URL inconnue renvoie vers `maintenance.html` |
+| `politique-de-confidentialite.html`, `suppression-donnees.html` | **Non redirigées** volontairement (obligation légale + exigence de l'application Facebook). Liées depuis le pied de `maintenance.html` |
+
+### Procédure de remise en ligne
+
+**Option A : annuler le commit (le plus simple)**
+
+```bash
+git pull
+git revert 366a59b
+git push origin main
+```
+
+Cela retire les redirections et supprime `404.html` et `maintenance.html`. Pour **garder** `maintenance.html` en vue d'une prochaine maintenance, la restaurer avant le push :
+
+```bash
+git checkout 366a59b -- maintenance.html
+git commit -m "Conserver la page de maintenance"
+```
+
+⚠️ Si des pages ont été modifiées après le commit `366a59b`, le revert peut créer un conflit : utiliser alors l'option B.
+
+**Option B : manuellement**
+
+1. Dans les 6 pages listées ci-dessus, supprimer les 2 lignes situées juste après `<head>` (commentaire `<!-- MAINTENANCE ... -->` + ligne `<meta http-equiv="refresh" ...><script>...`). Pour retrouver toutes les pages concernées :
+   ```bash
+   grep -l "location.replace('/maintenance.html')" *.html
+   ```
+   (`404.html` apparaîtra aussi dans la liste : le traiter à l'étape 2)
+2. Supprimer `404.html` (ou le remplacer par une vraie page 404).
+3. `maintenance.html` peut rester en place : elle est en `noindex` et n'est liée depuis aucune page.
+4. Commiter et pousser sur `main`.
+
+**Vérifications après remise en ligne**
+
+- Attendre 1 à 2 minutes le déploiement GitHub Pages (onglet *Actions* du dépôt).
+- Ouvrir https://espritterroir.fr en navigation privée (ou `Ctrl+F5`) : la page d'accueil doit s'afficher sans redirection.
+- Tester quelques pages : `/primeur.html`, `/poulet-roti.html`, `/panier.html`.
+- Vérifier qu'aucune page n'est encore redirigée : `grep -l "maintenance.html" *.html` ne doit plus renvoyer que `maintenance.html` elle-même.
+- Retirer cette section du README.
+
+### Remettre le site en maintenance plus tard
+
+Ré-ajouter le bloc de redirection juste après `<head>` dans les 6 pages, recréer `404.html` (`git checkout 366a59b -- 404.html`), puis pousser.
+
 ## Fonctionnalités temporairement désactivées
 
 ### Section « Avis clients Google » (index.html)
