@@ -86,7 +86,7 @@ Retirée du site le 27/10/2026 — **à remettre plus tard**.
 
 ## Page interne protégée : rapport des avis Google
 
-`rapport-avis-a5de75f0f127c5f5.html` : note de synthèse + liste complète des avis Google, **chiffrée** et protégée par mot de passe (mis en ligne le 11/11/2026).
+`rapport-avis-a5de75f0f127c5f5.html` : note de synthèse + liste complète des avis Google, **chiffrée** et protégée par mot de passe (mis en ligne le 11/11/2026). Deux boutons permettent de télécharger les versions PDF et CSV : ces fichiers sont intégrés au contenu chiffré (aucun PDF/CSV en clair sur le site ni dans le dépôt).
 
 - **Pourquoi pas de `.htaccess`** : le site est sur GitHub Pages, qui ignore le `.htaccess`. Et le dépôt étant public, une page en clair serait lisible sur GitHub. Le contenu est donc chiffré (AES-256-GCM, clé dérivée du mot de passe par PBKDF2-SHA256, 600 000 itérations) et déchiffré dans le navigateur. Le fichier commité ne contient aucune donnée lisible.
 - **Non indexée** : balises `noindex, nofollow, noarchive`, adresse non devinable, liée depuis aucune page, absente du `sitemap.xml`. Volontairement **absente de `robots.txt`** : un `Disallow` y révélerait l'adresse et empêcherait les robots de lire le `noindex`.
