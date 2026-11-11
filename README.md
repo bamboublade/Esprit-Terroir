@@ -83,3 +83,21 @@ Retirée du site le 27/10/2026 — **à remettre plus tard**.
 3. `script.js` : dé-commenter le bloc `.map-info-rating` dans `showBusinessInfoWindow()`.
 4. Remettre les libellés d'origine (titre/sous-titre de section, menus « Avis & Infos », pied de page « Avis & Contact »).
 5. Retirer cette entrée du README.
+
+## Page interne protégée : rapport des avis Google
+
+`rapport-avis-a5de75f0f127c5f5.html` : note de synthèse + liste complète des avis Google, **chiffrée** et protégée par mot de passe (mis en ligne le 11/11/2026).
+
+- **Pourquoi pas de `.htaccess`** : le site est sur GitHub Pages, qui ignore le `.htaccess`. Et le dépôt étant public, une page en clair serait lisible sur GitHub. Le contenu est donc chiffré (AES-256-GCM, clé dérivée du mot de passe par PBKDF2-SHA256, 600 000 itérations) et déchiffré dans le navigateur. Le fichier commité ne contient aucune donnée lisible.
+- **Non indexée** : balises `noindex, nofollow, noarchive`, adresse non devinable, liée depuis aucune page, absente du `sitemap.xml`. Volontairement **absente de `robots.txt`** : un `Disallow` y révélerait l'adresse et empêcherait les robots de lire le `noindex`.
+- **Hors maintenance** : la page ne contient pas le bloc de redirection, elle reste accessible pendant la maintenance.
+- **Le mot de passe n'est écrit nulle part dans le dépôt** (ni dans ce README). Il est communiqué de vive voix.
+
+**Régénérer la page** (nouvel export d'avis, ou changement de mot de passe) : le script d'export et les données sont dans `exports/` (dossier non versionné, données personnelles).
+
+```bash
+AVIS_PASSWORD="<mot de passe>" AVIS_PUBLISH_PATH="rapport-avis-a5de75f0f127c5f5.html" \
+  python -P exports/export_avis_google.py <dossier Takeout décompressé> exports
+```
+
+Puis commiter et pousser le fichier. Pour **retirer** la page : supprimer le fichier, commiter, pousser.
